@@ -413,7 +413,10 @@ namespace ACE.Server.Factories.Tables
                 itemSpells.Remove(SpellId.SwiftKillerOther1);
                 itemSpells.Remove(SpellId.DefenderOther1);
                 itemSpells.Remove(SpellId.HermeticLinkOther1);
+
+                itemSpells.Remove(SpellId.SpiritDrinkerSelf1);
                 itemSpells.Remove(SpellId.SpiritDrinkerOther1);
+                itemSpells.Remove(SpellId.SpiritLoather1);
 
                 NumSpells = creatureSpells.Count + lifeSpells.Count + itemSpells.Count + warSpells.Count;
                 Table = new SpellId[NumSpells][];
