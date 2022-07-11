@@ -17,6 +17,16 @@ namespace ACE.DatLoader
         private static int ITERATION_PORTAL = 2072;
         private static int ITERATION_HIRES = 497;
         private static int ITERATION_LANGUAGE = 994;
+
+        private static int INFILTRATION_ITERATION_CELL = 10001;
+        private static int INFILTRATION_ITERATION_PORTAL = 10001;
+        private static int INFILTRATION_ITERATION_HIRES = 497;
+        private static int INFILTRATION_ITERATION_LANGUAGE = 994;
+
+        private static int CUSTOMDM_ITERATION_CELL = 20001;
+        private static int CUSTOMDM_ITERATION_PORTAL = 20001;
+        private static int CUSTOMDM_ITERATION_HIRES = 497;
+        private static int CUSTOMDM_ITERATION_LANGUAGE = 994;
         public static CellDatDatabase CellDat { get; private set; }
 
         public static PortalDatDatabase PortalDat { get; private set; }
@@ -35,20 +45,20 @@ namespace ACE.DatLoader
                     CellDat = new CellDatDatabase(datFile, keepOpen);
                     count = CellDat.AllFiles.Count;
                     log.Info($"Successfully opened {datFile} file, containing {count} records, iteration {CellDat.Iteration}");
-                    if (Common.ConfigManager.Config.Server.WorldRuleset == Common.Ruleset.EoR)
+                    switch (Common.ConfigManager.Config.Server.WorldRuleset)
                     {
-                        if (CellDat.Iteration != ITERATION_CELL)
-                            log.Warn($"{datFile} iteration {CellDat.Iteration} not match expected end-of-retail version of {ITERATION_CELL}.");
-                    }
-                    else if (Common.ConfigManager.Config.Server.WorldRuleset == Common.Ruleset.Infiltration)
-                    {
-                        if (CellDat.Iteration != 10000)
-                            log.Warn($"{datFile} iteration {CellDat.Iteration} does not match expected version of 10000.");
-                    }
-                    else if (Common.ConfigManager.Config.Server.WorldRuleset == Common.Ruleset.CustomDM)
-                    {
-                        if (CellDat.Iteration != 20000)
-                            log.Warn($"{datFile} iteration {CellDat.Iteration} does not match expected version of 20000.");
+                        case Common.Ruleset.EoR:
+                            if (CellDat.Iteration != ITERATION_CELL)
+                                log.Warn($"{datFile} iteration {CellDat.Iteration} not match expected end-of-retail version of {ITERATION_CELL}.");
+                            break;
+                        case Common.Ruleset.Infiltration:
+                            if (CellDat.Iteration != INFILTRATION_ITERATION_CELL)
+                                log.Warn($"{datFile} iteration {CellDat.Iteration} does not match expected version of {INFILTRATION_ITERATION_CELL}.");
+                            break;
+                        case Common.Ruleset.CustomDM:
+                            if (CellDat.Iteration != CUSTOMDM_ITERATION_CELL)
+                                log.Warn($"{datFile} iteration {CellDat.Iteration} does not match expected version of {CUSTOMDM_ITERATION_CELL}.");
+                            break;
                     }
                 }
                 catch (FileNotFoundException ex)
@@ -64,22 +74,22 @@ namespace ACE.DatLoader
                 PortalDat = new PortalDatDatabase(datFile, keepOpen);
                 count = PortalDat.AllFiles.Count;
                 log.Info($"Successfully opened {datFile} file, containing {count} records, iteration {PortalDat.Iteration}");
-                if (Common.ConfigManager.Config.Server.WorldRuleset == Common.Ruleset.EoR)
+                switch (Common.ConfigManager.Config.Server.WorldRuleset)
                 {
-                    PortalDat.SkillTable.AddRetiredSkills();
+                    case Common.Ruleset.EoR:
+                        PortalDat.SkillTable.AddRetiredSkills();
 
-                    if (PortalDat.Iteration != ITERATION_PORTAL)
-                        log.Warn($"{datFile} iteration {PortalDat.Iteration} does not match expected end-of-retail version of {ITERATION_PORTAL}.");
-                }
-                else if (Common.ConfigManager.Config.Server.WorldRuleset == Common.Ruleset.Infiltration)
-                {
-                    if (PortalDat.Iteration != 10000)
-                        log.Warn($"{datFile} iteration {PortalDat.Iteration} does not match expected version of 10000.");
-                }
-                else if (Common.ConfigManager.Config.Server.WorldRuleset == Common.Ruleset.CustomDM)
-                {
-                    if (PortalDat.Iteration != 20000)
-                        log.Warn($"{datFile} iteration {PortalDat.Iteration} does not match expected version of 20000.");
+                        if (PortalDat.Iteration != ITERATION_PORTAL)
+                            log.Warn($"{datFile} iteration {PortalDat.Iteration} does not match expected end-of-retail version of {ITERATION_PORTAL}.");
+                        break;
+                    case Common.Ruleset.Infiltration:
+                        if (PortalDat.Iteration != INFILTRATION_ITERATION_PORTAL)
+                            log.Warn($"{datFile} iteration {PortalDat.Iteration} does not match expected version of {INFILTRATION_ITERATION_PORTAL}.");
+                        break;
+                    case Common.Ruleset.CustomDM:
+                        if (PortalDat.Iteration != CUSTOMDM_ITERATION_PORTAL)
+                            log.Warn($"{datFile} iteration {PortalDat.Iteration} does not match expected version of {CUSTOMDM_ITERATION_PORTAL}.");
+                        break;
                 }
             }
             catch (FileNotFoundException ex)
@@ -95,8 +105,21 @@ namespace ACE.DatLoader
                 HighResDat = new DatDatabase(datFile, keepOpen);
                 count = HighResDat.AllFiles.Count;
                 log.Info($"Successfully opened {datFile} file, containing {count} records, iteration {HighResDat.Iteration}");
-                if (HighResDat.Iteration != ITERATION_HIRES)
-                    log.Warn($"{datFile} iteration does not match expected end-of-retail version of {ITERATION_HIRES}.");
+                switch (Common.ConfigManager.Config.Server.WorldRuleset)
+                {
+                    case Common.Ruleset.EoR:
+                        if (HighResDat.Iteration != ITERATION_HIRES)
+                            log.Warn($"{datFile} iteration does not match expected end-of-retail version of {ITERATION_HIRES}.");
+                        break;
+                    case Common.Ruleset.Infiltration:
+                        if (HighResDat.Iteration != INFILTRATION_ITERATION_HIRES)
+                            log.Warn($"{datFile} iteration does not match expected version of {INFILTRATION_ITERATION_HIRES}.");
+                        break;
+                    case Common.Ruleset.CustomDM:
+                        if (HighResDat.Iteration != CUSTOMDM_ITERATION_HIRES)
+                            log.Warn($"{datFile} iteration does not match expected version of {CUSTOMDM_ITERATION_HIRES}.");
+                        break;
+                }
             }
 
             try
@@ -105,8 +128,21 @@ namespace ACE.DatLoader
                 LanguageDat = new LanguageDatDatabase(datFile, keepOpen);
                 count = LanguageDat.AllFiles.Count;
                 log.Info($"Successfully opened {datFile} file, containing {count} records, iteration {LanguageDat.Iteration}");
-                if(LanguageDat.Iteration != ITERATION_LANGUAGE)
-                    log.Warn($"{datFile} iteration does not match expected end-of-retail version of {ITERATION_LANGUAGE}.");
+                switch (Common.ConfigManager.Config.Server.WorldRuleset)
+                {
+                    case Common.Ruleset.EoR:
+                        if (LanguageDat.Iteration != ITERATION_LANGUAGE)
+                            log.Warn($"{datFile} iteration does not match expected end-of-retail version of {ITERATION_LANGUAGE}.");
+                        break;
+                    case Common.Ruleset.Infiltration:
+                        if (LanguageDat.Iteration != INFILTRATION_ITERATION_LANGUAGE)
+                            log.Warn($"{datFile} iteration does not match expected version of {INFILTRATION_ITERATION_LANGUAGE}.");
+                        break;
+                    case Common.Ruleset.CustomDM:
+                        if (LanguageDat.Iteration != CUSTOMDM_ITERATION_LANGUAGE)
+                            log.Warn($"{datFile} iteration does not match expected version of {CUSTOMDM_ITERATION_LANGUAGE}.");
+                        break;
+                }
             }
             catch (FileNotFoundException ex)
             {

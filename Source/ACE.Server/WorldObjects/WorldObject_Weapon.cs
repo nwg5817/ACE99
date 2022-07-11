@@ -231,6 +231,13 @@ namespace ACE.Server.WorldObjects
             var speedMod = weapon != null ? weapon.EnchantmentManager.GetWeaponSpeedMod() : 0;
             var auraSpeedMod = wielder != null ? wielder.EnchantmentManager.GetWeaponSpeedMod() : 0;
 
+            if (Common.ConfigManager.Config.Server.WorldRuleset <= Common.Ruleset.Infiltration)
+            {
+                var multSpeedMod = weapon != null ? weapon.EnchantmentManager.GetWeaponMultiplicativeSpeedMod() : 1.0f;
+
+                return (uint)Math.Max(0, Math.Round((baseSpeed * multSpeedMod) + speedMod + auraSpeedMod));
+            }
+
             return (uint)Math.Max(0, baseSpeed + speedMod + auraSpeedMod);
         }
 

@@ -1119,13 +1119,34 @@ namespace ACE.Server.Command.Handlers
         [CommandHandler("addallspells", AccessLevel.Developer, CommandHandlerFlag.RequiresWorld, 0, "Adds all known spells to your own spellbook.")]
         public static void HandleAddAllSpells(Session session, params string[] parameters)
         {
-            for (uint spellLevel = 1; spellLevel <= 8; spellLevel++)
+            switch (Common.ConfigManager.Config.Server.WorldRuleset)
             {
-                session.Player.LearnSpellsInBulk(MagicSchool.CreatureEnchantment, spellLevel);
-                session.Player.LearnSpellsInBulk(MagicSchool.ItemEnchantment, spellLevel);
-                session.Player.LearnSpellsInBulk(MagicSchool.LifeMagic, spellLevel);
-                session.Player.LearnSpellsInBulk(MagicSchool.VoidMagic, spellLevel);
-                session.Player.LearnSpellsInBulk(MagicSchool.WarMagic, spellLevel);
+                case Common.Ruleset.EoR:
+                    for (uint spellLevel = 1; spellLevel <= 8; spellLevel++)
+                    {
+                        session.Player.LearnSpellsInBulk(MagicSchool.CreatureEnchantment, spellLevel);
+                        session.Player.LearnSpellsInBulk(MagicSchool.ItemEnchantment, spellLevel);
+                        session.Player.LearnSpellsInBulk(MagicSchool.LifeMagic, spellLevel);
+                        session.Player.LearnSpellsInBulk(MagicSchool.VoidMagic, spellLevel);
+                        session.Player.LearnSpellsInBulk(MagicSchool.WarMagic, spellLevel);
+                    }
+                    break;
+                case Common.Ruleset.Infiltration:
+                    for (uint spellLevel = 1; spellLevel <= 7; spellLevel++)
+                    {
+                        session.Player.LearnSpellsInBulk(MagicSchool.CreatureEnchantment, spellLevel);
+                        session.Player.LearnSpellsInBulk(MagicSchool.ItemEnchantment, spellLevel);
+                        session.Player.LearnSpellsInBulk(MagicSchool.LifeMagic, spellLevel);
+                        session.Player.LearnSpellsInBulk(MagicSchool.WarMagic, spellLevel);
+                    }
+                    break;
+                case Common.Ruleset.CustomDM:
+                    for (uint spellLevel = 1; spellLevel <= 7; spellLevel++)
+                    {
+                        session.Player.LearnSpellsInBulk(MagicSchool.LifeMagic, spellLevel);
+                        session.Player.LearnSpellsInBulk(MagicSchool.WarMagic, spellLevel);
+                    }
+                    break;
             }
         }
 

@@ -90,7 +90,17 @@ namespace ACE.Server.Network.Structure
             var baseSpeed = weapon.GetProperty(PropertyInt.WeaponTime) ?? 0;   // safe to assume defaults here?
             var speedMod = weapon.EnchantmentManager.GetWeaponSpeedMod();
             var auraSpeedMod = wielder != null ? wielder.EnchantmentManager.GetWeaponSpeedMod() : 0;
-            Enchantment_WeaponTime = weapon.IsEnchantable ? speedMod + auraSpeedMod : speedMod;
+
+            if (Common.ConfigManager.Config.Server.WorldRuleset <= Common.Ruleset.Infiltration)
+            {
+                var multSpeedMod = weapon.EnchantmentManager.GetWeaponMultiplicativeSpeedMod();
+
+                int multSpeedBonus = -(int)Math.Round(baseSpeed - (baseSpeed * multSpeedMod));
+                Enchantment_WeaponTime = weapon.IsEnchantable ? speedMod + auraSpeedMod + multSpeedBonus : speedMod + multSpeedBonus;
+            }
+            else
+                Enchantment_WeaponTime = weapon.IsEnchantable ? speedMod + auraSpeedMod : speedMod;
+
             return (uint)Math.Max(0, baseSpeed + Enchantment_WeaponTime);
         }
 
