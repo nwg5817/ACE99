@@ -400,7 +400,7 @@ namespace ACE.Server.WorldObjects
                             if (PropertyManager.GetBool("enforce_player_movement").Item)
                             {
                                 // Check for illegal player movements.
-                                var loggingHasJumpedSinceLastMovementUpdate = HasJumpedSinceLastMovementUpdate;
+                                var loggingHasJumpedSinceLastMovementUpdate = HasJumpedOrChargedSinceLastMovementUpdate;
                                 var loggingPrevMaxMovementSpeed = PrevMovementUpdateMaxSpeed;
                                 var loggingInertia = false;
 
@@ -420,11 +420,11 @@ namespace ACE.Server.WorldObjects
                                     currentMaxSpeed = (5.5f * GetRunRate() * deltaTime * (1.0f + velocity / 5.0f)) + 2.0f;
 
                                 var isPlayerInitiatedMovement = (CurrentMoveToState.RawMotionState.Flags & (RawMotionFlags.ForwardCommand | RawMotionFlags.SideStepCommand)) != 0;
-                                if (IsJumping || HasJumpedSinceLastMovementUpdate || isPlayerInitiatedMovement) // If we're jumping we're moving even if we're not pressing any keys.
+                                if (IsJumping || HasJumpedOrChargedSinceLastMovementUpdate || isPlayerInitiatedMovement || IsPlayerMovingTo || IsPlayerMovingTo2)
                                     LastPlayerInitiatedMovementTime = DateTime.UtcNow;
 
-                                if(!IsJumping)
-                                    HasJumpedSinceLastMovementUpdate = false; // Delay disabling this if we're jumping
+                                if(!IsJumping && !IsPlayerMovingTo && !IsPlayerMovingTo2)
+                                    HasJumpedOrChargedSinceLastMovementUpdate = false; // Delay disabling this until we're done with the automatic movement.
 
                                 float timeSincePlayerInitiatedMovement = (float)(DateTime.UtcNow - LastPlayerInitiatedMovementTime).TotalSeconds;
                                 if (timeSincePlayerInitiatedMovement > 3.0f) // Give it a few seconds to resolve any inertia.

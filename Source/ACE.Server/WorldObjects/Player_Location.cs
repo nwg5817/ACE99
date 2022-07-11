@@ -695,7 +695,7 @@ namespace ACE.Server.WorldObjects
             SnapPos = Location;
             PrevMovementUpdateMaxSpeed = 0.0f;
             LastPlayerInitiatedMovementTime = DateTime.UtcNow;
-            HasJumpedSinceLastMovementUpdate = false;
+            HasJumpedOrChargedSinceLastMovementUpdate = false;
 
             CheckMonsters();
             CheckHouse();
