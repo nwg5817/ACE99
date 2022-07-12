@@ -169,6 +169,20 @@
       "Database": "ace_world",
       "Username": "acedockeruser",
       "Password": "2020acEmulator2017"
+    },
+    "PKKills": {
+      "Host": "ace-db",
+      "Port": 3306,
+      "Database": "ace_shard_pk_kills",
+      "Username": "acedockeruser",
+      "Password": "2020acEmulator2017"
+    },
+    "SessionLog": {
+        "Host": "ace-db",
+        "Port": 3306,
+        "Database": "ace_shard_session_log",
+        "Username": "acedockeruser",
+        "Password": "2020acEmulator2017"
     }
   },
   // This section can trigger events that may happen before the world starts up, or after it shuts down

@@ -16,6 +16,7 @@ using ACE.Server.Managers;
 using ACE.Server.Network.Enum;
 using ACE.Server.Network.GameMessages;
 using ACE.Server.Network.GameMessages.Messages;
+using System;
 
 namespace ACE.Server.Network.Handlers
 {
@@ -268,6 +269,15 @@ namespace ACE.Server.Network.Handlers
             session.State = SessionState.WorldConnected;
 
             WorldManager.PlayerEnterWorld(session, character);
+
+            try
+            {
+                new SessionLogDatabase().LogCharacterLogin(session.AccountId, session.Account, session.EndPoint.Address.ToString(), character.Id, character.Name);
+            }
+            catch (Exception)
+            {
+
+            }
         }
 
 

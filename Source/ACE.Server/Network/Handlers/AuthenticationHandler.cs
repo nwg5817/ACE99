@@ -28,6 +28,8 @@ namespace ACE.Server.Network.Handlers
 
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private static readonly ILog packetLog = LogManager.GetLogger(System.Reflection.Assembly.GetEntryAssembly(), "Packets");
+        private static List<string> vpnBlockedIPs = new List<string>();
+        private static List<string> vpnClearedIPs = new List<string>();
 
         public static void HandleLoginRequest(ClientPacket packet, Session session)
         {
@@ -173,6 +175,48 @@ namespace ACE.Server.Network.Handlers
                     return;
                 }
 
+                //Disallow VPN connections
+                if (PropertyManager.GetBool("block_vpn_connections").Item)
+                {
+                    try
+                    {
+                        var currIp = session.EndPoint.Address.ToString();
+                        bool isVpn = false;
+                        if (!vpnClearedIPs.Contains(currIp))
+                        {
+                            if (vpnBlockedIPs.Contains(currIp))
+                            {
+                                isVpn = true;
+                            }
+                            else
+                            {
+                                //The IP isn't on the block list or on the cleared list, so check against API to see if its a VPN
+                                isVpn = CheckForVpn(currIp);
+                                if (isVpn)
+                                {
+                                    vpnBlockedIPs.Add(currIp);
+                                }
+                                else
+                                {
+                                    vpnClearedIPs.Add(currIp);
+                                }
+                            }
+                        }
+
+                        if (isVpn)
+                        {
+                            log.Info($"Blocked login attempt for account {session.Account} from IP {currIp} due to VPN detection");
+                            string bootMsg = " Connections from VPN / proxy disallowed by server policy";
+                            session.Terminate(SessionTerminationReason.AccountBooted, new GameMessageBootAccount(bootMsg), null, bootMsg);
+                            return;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        log.Error($"Exception during VPN detection check for account = {session.Account}.  Ex: {ex}");
+                    }
+                }
+
                 if (PropertyManager.GetBool("account_login_boots_in_use").Item)
                 {
                     var previouslyConnectedAccount = NetworkManager.Find(account.AccountName);
@@ -219,6 +263,15 @@ namespace ACE.Server.Network.Handlers
 
             session.SetAccount(account.AccountId, account.AccountName, (AccessLevel)account.AccessLevel);
             session.State = SessionState.AuthConnectResponse;
+
+            try
+            {
+                new SessionLogDatabase().LogAccountSessionStart(session.AccountId, session.Account, session.EndPoint.Address.ToString());
+            }
+            catch(Exception ex)
+            {
+                log.Error($"Exception in AuthenticationHandler.AccountSelectCallback logging account session start. Ex: {ex}");
+            }
         }
 
         public static void HandleConnectResponse(Session session)
@@ -249,6 +302,37 @@ namespace ACE.Server.Network.Handlers
 
             session.Network.EnqueueSend(characterListMessage, serverNameMessage);
             session.Network.EnqueueSend(dddInterrogation);
+        }
+
+        private static bool CheckForVpn(string ip)
+        {
+            if(ip.Equals("127.0.0.1"))
+            {
+                return false;
+            }
+
+            bool isVpn = false;
+            //Console.WriteLine("In AuthenticationHandler.CheckForVpn");            
+
+            try
+            {
+                var task = VPNDetection.CheckVPN(ip.ToString());
+                task.Wait();
+                var ispInfo = task.Result;
+
+                if (ispInfo == null || (!String.IsNullOrEmpty(ispInfo.Proxy) && !ispInfo.Proxy.Equals("no")))
+                {
+                    Console.WriteLine($"ISPInfo = {(ispInfo == null ? "NULL" : ispInfo.ToString())}");
+                    isVpn = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error($"Exception in AuthenticationHandler.CheckForVPN. Ex: {ex}");
+            }
+
+            //Console.WriteLine($"AuthenticationHandler.CheckForVpn returning isVpn = {isVpn}");
+            return isVpn;
         }
     }
 }

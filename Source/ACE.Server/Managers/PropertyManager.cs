@@ -585,6 +585,7 @@ namespace ACE.Server.Managers
                 ("version_info_enabled", new Property<bool>(false, "toggles the /aceversion player command")),
                 ("world_closed", new Property<bool>(false, "enable this to startup world as a closed to players world")),
                 ("allow_xp_at_max_level", new Property<bool>(false, "enable this to allow players to continue earning xp after reaching max level")),
+                ("block_vpn_connections", new Property<bool>(false, "enable this to block user sessions from IPs identified as VPN proxies")),
                 ("increase_minimum_encounter_spawn_density", new Property<bool>(false, "enable this to increase the density of random encounters that spawn in low density landblocks")),
                 ("enforce_player_movement", new Property<bool>(false, "enable this to enforce server side verification of player movement"))
                 );
@@ -656,7 +657,10 @@ namespace ACE.Server.Managers
                 ("popup_header", new Property<string>("Welcome to Asheron's Call!", "Welcome message displayed when you log in")),
                 ("popup_welcome", new Property<string>("To begin your training, speak to the Society Greeter. Walk up to the Society Greeter using the 'W' key, then double-click on her to initiate a conversation.", "Welcome message popup in training halls")),
                 ("popup_motd", new Property<string>("", "Popup message of the day")),
-                ("server_motd", new Property<string>("", "Server message of the day"))
+                ("server_motd", new Property<string>("", "Server message of the day")),
+                ("turbine_chat_webhook", new Property<string>("", "Webhook to be used for turbine chat. This is for copying ingame general chat channels to a Discord channel.")),
+                ("turbine_chat_webhook_audit", new Property<string>("", "Webhook to be used for ingame audit log.")),
+                ("proxycheck_api_key", new Property<string>("", "API key for proxycheck.io service for VPN detection"))
                 );
     }
 }

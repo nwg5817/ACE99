@@ -169,6 +169,20 @@
       "Database": "ace_world",
       "Username": "root",
       "Password": ""
+    },
+    "PKKills": {
+      "Host": "127.0.0.1",
+      "Port": 3306,
+      "Database": "ace_shard_pk_kills",
+      "Username": "root",
+      "Password": ""
+    },
+    "SessionLog": {
+        "Host": "127.0.0.1",
+        "Port": 3306,
+        "Database": "ace_shard_session_log",
+        "Username": "root",
+        "Password": ""
     }
   },
   // This section can trigger events that may happen before the world starts up, or after it shuts down

@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using System.Threading.Tasks;
 
 using ACE.Entity.Enum;
 using ACE.Server.Entity;
@@ -151,10 +152,81 @@ namespace ACE.Server.Network.Handlers
                     }
 
                     session.Network.EnqueueSend(new GameMessageTurbineChat(ChatNetworkBlobType.NETBLOB_RESPONSE_BINARY, contextId, null, null, 0, chatType));
+
+                    if (chatType == ChatType.General && channelID == TurbineChatChannel.General)
+                    {
+                        _ = SendWebhookedChat(gameMessageTurbineChat.SenderName, gameMessageTurbineChat.Message, null, channelID);
+                    }
                 }
             }
             else
                 Console.WriteLine($"Unhandled TurbineChatHandler ChatNetworkBlobType: 0x{(uint)chatBlobType:X4}");
+        }
+
+        static bool webhookMissingErrorEmitted = false;
+
+        public static async Task SendWebhookedChat(string sender, string message, string webhookUrl = null, uint? channelId = null)
+        {
+            if(!string.IsNullOrEmpty(message))
+            {
+                message = message.Replace('@', ' ');
+            }
+
+            if (channelId != null)
+            {
+                if (!System.Enum.TryParse<TurbineChatChannel_Enum>(channelId.ToString(), out var channelEnum))
+                {
+                    //log.Warn($"SendWebhookedChat: Invalid channel ID {channelId}");
+                    return;
+                }
+                var channelName = $"{channelEnum}";
+                await SendWebhookedChat(sender, message, webhookUrl, channelName);
+            }
+            else
+            {
+                await SendWebhookedChat(sender, message, webhookUrl, "");
+            }
+        }
+
+        public static async Task SendWebhookedChat(string sender, string message, string webhookUrl = null, string channelName = "")
+        {
+            await Task.Run(() =>
+            {
+                try
+                {
+                    string webhook = webhookUrl;
+                    if (webhook == null)
+                    {
+                        webhook = PropertyManager.GetString("turbine_chat_webhook").Item;
+                        if (webhook == "")
+                        {
+                            if (!webhookMissingErrorEmitted)
+                            {
+                                webhookMissingErrorEmitted = true;
+                                //log.Warn("server property turbine_chat_webhook must be set in order to output chat to a Discord channel.");
+                            }
+                            return;
+                        }
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(channelName))
+                        channelName = $"[{channelName}] ";
+
+                    var dict = new System.Collections.Generic.Dictionary<string, string>();
+                    dict["content"] = $"{channelName}{sender}: \"{message}\"";
+
+                    var payload = Newtonsoft.Json.JsonConvert.SerializeObject(dict);
+                    using (var wc = new System.Net.WebClient())
+                    {
+                        wc.Headers.Add("Content-Type", "application/json");
+                        wc.UploadString(webhook, payload);
+                    }
+                }
+                catch (Exception)
+                {
+                    //log.Error(ex);
+                }
+            });
         }
     }
 }
