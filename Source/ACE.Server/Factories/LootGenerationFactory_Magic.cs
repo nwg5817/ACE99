@@ -34,7 +34,7 @@ namespace ACE.Server.Factories
                     return;
             }
 
-            if (numSpells == 0)
+            if (numSpells == 0 && wo.SpellDID == null)
             {
                 // we ended up without any spells, revert to non-magic item.
                 wo.ItemManaCost = null;
