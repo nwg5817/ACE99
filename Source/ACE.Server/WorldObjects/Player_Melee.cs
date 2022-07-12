@@ -145,7 +145,7 @@ namespace ACE.Server.WorldObjects
 
         public void HandleActionTargetedMeleeAttack_Inner(WorldObject target, int attackSequence)
         {
-            HasJumpedOrChargedSinceLastMovementUpdate = true;
+            HasPerformedActionsSinceLastMovementUpdate = true;
 
             var dist = GetCylinderDistance(target);
 
