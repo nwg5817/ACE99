@@ -408,6 +408,30 @@ namespace ACE.Server.Factories.Tables
             }
             else if (Common.ConfigManager.Config.Server.WorldRuleset <= Common.Ruleset.Infiltration)
             {
+                creatureSpells.Add(SpellId.SpearMasterySelf1);
+                creatureSpells.Add(SpellId.SpearMasteryOther1);
+                creatureSpells.Add(SpellId.SpearIneptitudeOther1);
+
+                creatureSpells.Add(SpellId.StaffMasterySelf1);
+                creatureSpells.Add(SpellId.StaffMasteryOther1);
+                creatureSpells.Add(SpellId.StaffIneptitudeOther1);
+
+                creatureSpells.Add(SpellId.MaceMasterySelf1);
+                creatureSpells.Add(SpellId.MaceMasteryOther1);
+                creatureSpells.Add(SpellId.MaceIneptitudeOther1);
+
+                creatureSpells.Add(SpellId.CrossbowMasterySelf1);
+                creatureSpells.Add(SpellId.CrossbowMasteryOther1);
+                creatureSpells.Add(SpellId.CrossbowIneptitudeOther1);
+
+                creatureSpells.Add(SpellId.ThrownWeaponMasterySelf1);
+                creatureSpells.Add(SpellId.ThrownWeaponMasteryOther1);
+                creatureSpells.Add(SpellId.ThrownWeaponIneptitudeOther1);
+
+                creatureSpells.Add(SpellId.UnarmedCombatMasterySelf1);
+                creatureSpells.Add(SpellId.UnarmedCombatMasteryOther1);
+                creatureSpells.Add(SpellId.UnarmedCombatIneptitudeOther1);
+
                 itemSpells.Remove(SpellId.BloodDrinkerOther1);
                 itemSpells.Remove(SpellId.HeartSeekerOther1);
                 itemSpells.Remove(SpellId.SwiftKillerOther1);
