@@ -410,6 +410,7 @@ namespace ACE.Server.WorldObjects
                                 float currentMaxSpeed;
                                 float timeSinceLastAction;
                                 bool isMovingOrAnimating;
+
                                 if (FastTick && velocity != 0.0f)
                                 {
                                     if (PhysicsObj.IsMovingOrAnimating || IsMoving || IsPlayerMovingTo || IsPlayerMovingTo2)
@@ -428,8 +429,10 @@ namespace ACE.Server.WorldObjects
                                 }
                                 else
                                 {
+                                    var isWaitingForNextUseTime = DateTime.UtcNow < NextUseTime;
                                     var isPlayerInitiatedMovement = (CurrentMoveToState.RawMotionState.Flags & (RawMotionFlags.ForwardCommand | RawMotionFlags.SideStepCommand | RawMotionFlags.TurnCommand)) != 0;
-                                    if (isPlayerInitiatedMovement || IsJumping || IsMoving || IsPlayerMovingTo || IsPlayerMovingTo2)
+
+                                    if (isPlayerInitiatedMovement || IsJumping || IsMoving || IsPlayerMovingTo || IsPlayerMovingTo2 || isWaitingForNextUseTime)
                                         LastPlayerInitiatedActionTime = DateTime.UtcNow;
 
                                     timeSinceLastAction = (float)(DateTime.UtcNow - LastPlayerInitiatedActionTime).TotalSeconds;
