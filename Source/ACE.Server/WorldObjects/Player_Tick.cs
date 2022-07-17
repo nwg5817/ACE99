@@ -400,7 +400,6 @@ namespace ACE.Server.WorldObjects
                             if (PropertyManager.GetBool("enforce_player_movement").Item)
                             {
                                 // Check for illegal player movements.
-                                var loggingHasPerformedActionsSinceLastMovementUpdate = HasPerformedActionsSinceLastMovementUpdate;
                                 var loggingPrevMaxMovementSpeed = PrevMovementUpdateMaxSpeed;
                                 var loggingInertia = false;
 
@@ -409,26 +408,41 @@ namespace ACE.Server.WorldObjects
                                 var dist = Location.DistanceTo(newPosition);
                                 float velocity = PhysicsObj.CachedVelocity.Length();
                                 float currentMaxSpeed;
+                                float timeSinceLastAction;
+                                bool isMovingOrAnimating;
                                 if (FastTick && velocity != 0.0f)
                                 {
+                                    if (PhysicsObj.IsMovingOrAnimating || IsMoving || IsPlayerMovingTo || IsPlayerMovingTo2)
+                                        LastPlayerInitiatedActionTime = DateTime.UtcNow;
+
+                                    timeSinceLastAction = (float)(DateTime.UtcNow - LastPlayerInitiatedActionTime).TotalSeconds;
+                                    if (timeSinceLastAction > 3.0f) // Give it a few seconds to resolve any inertia.
+                                        isMovingOrAnimating = false;
+                                    else
+                                        isMovingOrAnimating = true;
+
                                     var runRate = GetRunRate();
                                     currentMaxSpeed = (1.8f * runRate * deltaTime * (1.0f + velocity / 8.0f)) + 5.0f;
                                     if (runRate < 1.9f && PhysicsObj.CachedVelocity.Z < -20.0f) // Very slow characters can still fall pretty quickly.
                                         currentMaxSpeed *= 2.5f;
                                 }
                                 else
+                                {
+                                    var isPlayerInitiatedMovement = (CurrentMoveToState.RawMotionState.Flags & (RawMotionFlags.ForwardCommand | RawMotionFlags.SideStepCommand | RawMotionFlags.TurnCommand)) != 0;
+                                    if (isPlayerInitiatedMovement || IsJumping || IsMoving || IsPlayerMovingTo || IsPlayerMovingTo2)
+                                        LastPlayerInitiatedActionTime = DateTime.UtcNow;
+
+                                    timeSinceLastAction = (float)(DateTime.UtcNow - LastPlayerInitiatedActionTime).TotalSeconds;
+                                    if (timeSinceLastAction > 3.0f) // Give it a few seconds to resolve any inertia.
+                                        isMovingOrAnimating = false;
+                                    else
+                                        isMovingOrAnimating = true;
+
                                     currentMaxSpeed = (5.5f * GetRunRate() * deltaTime * (1.0f + velocity / 5.0f)) + 2.0f;
+                                }
 
-                                var isPlayerInitiatedMovement = (CurrentMoveToState.RawMotionState.Flags & (RawMotionFlags.ForwardCommand | RawMotionFlags.SideStepCommand)) != 0;
-                                if (IsJumping || HasPerformedActionsSinceLastMovementUpdate || isPlayerInitiatedMovement || IsPlayerMovingTo || IsPlayerMovingTo2)
-                                    LastPlayerInitiatedActionTime = DateTime.UtcNow;
-
-                                if (!IsJumping && !IsPlayerMovingTo && !IsPlayerMovingTo2)
-                                    HasPerformedActionsSinceLastMovementUpdate = false; // Delay disabling this until we're done with the automatic movement.
-
-                                float timeSinceLastAction = (float)(DateTime.UtcNow - LastPlayerInitiatedActionTime).TotalSeconds;
-                                if (timeSinceLastAction > 3.0f) // Give it a few seconds to resolve any inertia.
-                                    currentMaxSpeed = 3.0f; // We are standing still and we're not requesting any movements.
+                                if (!isMovingOrAnimating)
+                                    currentMaxSpeed = 0.0f;
                                 else if (currentMaxSpeed < PrevMovementUpdateMaxSpeed && PrevMovementUpdateMaxSpeed > 25.0f)
                                 {
                                     // We were going really fast and now we are slowing down but we might still have some inertia.
@@ -440,15 +454,15 @@ namespace ACE.Server.WorldObjects
                                 if (dist > currentMaxSpeed)
                                 {
                                     Session.Network.EnqueueSend(new GameMessageSystemChat("Invalid movement update detected. Rolling back to last good position.", ChatMessageType.Help));
-                                    Session.Network.EnqueueSend(new GameMessageSystemChat($"Speed: {dist.ToString("0.00")}/{currentMaxSpeed.ToString("0.00")} PrevMaxSpeed: {loggingPrevMaxMovementSpeed.ToString("0.00")}({loggingInertia}) FastTick: {FastTick} TimeSpam: {deltaTime.ToString("0.00")} Velocity: {velocity.ToString("0.00")} timeSinceLastAction: {timeSinceLastAction.ToString("0.00")} HasActions: {loggingHasPerformedActionsSinceLastMovementUpdate} IsJumping: {IsJumping}", ChatMessageType.Help));
-                                    log.Warn($"INVALID MOVEMENT DETECTED: {Name} - Speed: {dist.ToString("0.00")}/{currentMaxSpeed.ToString("0.00")} PrevMaxSpeed: {loggingPrevMaxMovementSpeed.ToString("0.00")}({loggingInertia}) FastTick: {FastTick} TimeSpam: {deltaTime.ToString("0.00")} Velocity: {velocity.ToString("0.00")} timeSinceLastAction: {timeSinceLastAction.ToString("0.00")} HasActions: {loggingHasPerformedActionsSinceLastMovementUpdate} IsJumping: {IsJumping}");
+                                    Session.Network.EnqueueSend(new GameMessageSystemChat($"Speed: {dist.ToString("0.00")}/{currentMaxSpeed.ToString("0.00")} PrevMaxSpeed: {loggingPrevMaxMovementSpeed.ToString("0.00")}({loggingInertia}) FastTick: {FastTick} TimeSpam: {deltaTime.ToString("0.00")} Velocity: {velocity.ToString("0.00")} timeSinceLastAction: {timeSinceLastAction.ToString("0.00")} isMovingOrAnimating: {isMovingOrAnimating} IsJumping: {IsJumping}", ChatMessageType.Help));
+                                    log.Warn($"INVALID MOVEMENT DETECTED: {Name} - Speed: {dist.ToString("0.00")}/{currentMaxSpeed.ToString("0.00")} PrevMaxSpeed: {loggingPrevMaxMovementSpeed.ToString("0.00")}({loggingInertia}) FastTick: {FastTick} TimeSpam: {deltaTime.ToString("0.00")} Velocity: {velocity.ToString("0.00")} timeSinceLastAction: {timeSinceLastAction.ToString("0.00")} isMovingOrAnimating: {isMovingOrAnimating} IsJumping: {IsJumping}");
                                     Location = new ACE.Entity.Position(SnapPos);
                                     Sequences.GetNextSequence(SequenceType.ObjectForcePosition);
                                     SendUpdatePosition();
                                     return false;
                                 }
                                 //else
-                                //    Session.Network.EnqueueSend(new GameMessageSystemChat($"Speed: {dist.ToString("0.00")}/{currentMaxSpeed.ToString("0.00")} PrevMaxSpeed: {loggingPrevMaxMovementSpeed.ToString("0.00")}({loggingInertia}) FastTick: {FastTick} TimeSpam: {deltaTime.ToString("0.00")} Velocity: {velocity.ToString("0.00")} timeSinceLastAction: {timeSinceLastAction.ToString("0.00")} HasActions: {loggingHasPerformedActionsSinceLastMovementUpdate} IsJumping: {IsJumping}", ChatMessageType.Broadcast));
+                                //    Session.Network.EnqueueSend(new GameMessageSystemChat($"Speed: {dist.ToString("0.00")}/{currentMaxSpeed.ToString("0.00")} PrevMaxSpeed: {loggingPrevMaxMovementSpeed.ToString("0.00")}({loggingInertia}) FastTick: {FastTick} TimeSpam: {deltaTime.ToString("0.00")} Velocity: {velocity.ToString("0.00")} timeSinceLastAction: {timeSinceLastAction.ToString("0.00")} isMovingOrAnimating: {isMovingOrAnimating} IsJumping: {IsJumping}", ChatMessageType.Broadcast));
 
                                 if (!IsJumping && PhysicsObj.TransientState.HasFlag(TransientStateFlags.OnWalkable))
                                     SnapPos = Location;

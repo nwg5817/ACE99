@@ -66,7 +66,6 @@ namespace ACE.Server.WorldObjects
         public ACE.Entity.Position SnapPos;
         public float PrevMovementUpdateMaxSpeed;
         public DateTime LastPlayerInitiatedActionTime;
-        public bool HasPerformedActionsSinceLastMovementUpdate;
 
         public ConfirmationManager ConfirmationManager;
 
@@ -926,7 +925,6 @@ namespace ACE.Server.WorldObjects
             }*/
 
             LastJumpTime = DateTime.UtcNow;
-            HasPerformedActionsSinceLastMovementUpdate = true;
 
             UpdateVitalDelta(Stamina, -staminaCost);
 
