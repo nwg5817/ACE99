@@ -46,7 +46,7 @@ namespace ACE.Server.Factories.Tables
             {
                 wandSpells = new List<(SpellId, float)>()
                 {
-                    ( SpellId.DefenderSelf1,      0.50f ),
+                    ( SpellId.DefenderSelf1,      0.25f ),
                     ( SpellId.HermeticLinkSelf1,  0.50f ),
                 };
             }
