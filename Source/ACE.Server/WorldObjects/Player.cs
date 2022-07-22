@@ -68,6 +68,8 @@ namespace ACE.Server.WorldObjects
         public bool HasPerformedActionsSinceLastMovementUpdate; // Ideally we wouldn't need this, but necessary until we figure out how to detect certain actions while a player isn't running with FastTicks enabled.
         public DateTime LastPlayerInitiatedActionTime;
         public DateTime LastPlayerMovementCheckTime;
+        public int MovementEnforcementCounter;
+        public DateTime MovementEnforcementTimer;
 
         public ConfirmationManager ConfirmationManager;
 

@@ -446,8 +446,11 @@ namespace ACE.Server.WorldObjects
                     else
                         PhysicsObj.Position.Frame.Orientation = newPosition.Rotation;
 
-                    if (PropertyManager.GetBool("enforce_player_movement").Item && !Teleporting)
+                    if (PropertyManager.GetBool("enforce_player_movement").Item && !Teleporting && GodState == null)
                     {
+                        if ((DateTime.UtcNow - MovementEnforcementTimer).TotalSeconds > 60)
+                            MovementEnforcementTimer = DateTime.UtcNow;
+
                         // Check for illegal player movements.
                         var loggingHasPerformedActionsSinceLastMovementUpdate = HasPerformedActionsSinceLastMovementUpdate;
                         var loggingPrevMaxMovementSpeed = PrevMovementUpdateMaxSpeed;
@@ -500,13 +503,43 @@ namespace ACE.Server.WorldObjects
 
                             if (dist > currentMaxSpeed)
                             {
-                                Session.Network.EnqueueSend(new GameMessageSystemChat("Invalid movement update detected. Rolling back to last good position.", ChatMessageType.Help));
-                                Session.Network.EnqueueSend(new GameMessageSystemChat($"Speed: {dist.ToString("0.00")}/{currentMaxSpeed.ToString("0.00")} PrevMaxSpeed: {loggingPrevMaxMovementSpeed.ToString("0.00")}({loggingInertia}) FastTick: {FastTick} TimeSpam: {deltaTime.ToString("0.00")} Velocity: {velocity.ToString("0.00")} timeSinceLastAction: {timeSinceLastAction.ToString("0.00")} isMovingOrAnimating: {isMovingOrAnimating} actionsSinceLastMovementUpdate: {loggingHasPerformedActionsSinceLastMovementUpdate}", ChatMessageType.Help));
-                                log.Warn($"INVALID MOVEMENT DETECTED: {Name} - Speed: {dist.ToString("0.00")}/{currentMaxSpeed.ToString("0.00")} PrevMaxSpeed: {loggingPrevMaxMovementSpeed.ToString("0.00")}({loggingInertia}) FastTick: {FastTick} TimeSpam: {deltaTime.ToString("0.00")} Velocity: {velocity.ToString("0.00")} timeSinceLastAction: {timeSinceLastAction.ToString("0.00")} isMovingOrAnimating: {isMovingOrAnimating} actionsSinceLastMovementUpdate: {loggingHasPerformedActionsSinceLastMovementUpdate}");
-                                Location = new ACE.Entity.Position(SnapPos);
-                                Sequences.GetNextSequence(SequenceType.ObjectForcePosition);
-                                SendUpdatePosition();
-                                return false;
+                                if (MovementEnforcementCounter < 11)
+                                {
+                                    if (MovementEnforcementCounter == 0 && currentMaxSpeed != 0 && dist < currentMaxSpeed * 1.5)
+                                    {
+                                        // Slight invalid movement detected but the player has otherwise been behaving, assume it was just a lag spike or client stutter.
+                                        MovementEnforcementCounter++;
+                                    }
+                                    else
+                                    {
+                                        MovementEnforcementCounter++;
+                                        if (MovementEnforcementCounter < 5)
+                                        {
+                                            Location = new ACE.Entity.Position(SnapPos);
+
+                                            Session.Network.EnqueueSend(new GameMessageSystemChat("Invalid movement detected. Rolling back to last known good location.", ChatMessageType.Help));
+                                            log.Warn($"{Name} - INVALID MOVEMENT DETECTED - Speed: {dist.ToString("0.00")}/{currentMaxSpeed.ToString("0.00")} PrevMaxSpeed: {loggingPrevMaxMovementSpeed.ToString("0.00")}({loggingInertia}) FastTick: {FastTick} TimeSpam: {deltaTime.ToString("0.00")} Velocity: {velocity.ToString("0.00")} timeSinceLastAction: {timeSinceLastAction.ToString("0.00")} isMovingOrAnimating: {isMovingOrAnimating} actionsSinceLastMovementUpdate: {loggingHasPerformedActionsSinceLastMovementUpdate}");
+                                        }
+                                        else
+                                        {
+                                            Location = PhysicsObj.Position.ACEPosition(); // If we're over 5 strikes assume the SnapPos is compromised, force current physics location instead.
+
+                                            Session.Network.EnqueueSend(new GameMessageSystemChat("Invalid movement detected. Force moving to server location.", ChatMessageType.Help));
+                                            log.Warn($"{Name} - INVALID MOVEMENT DETECTED - ATTEMPTING PHYSICS LOCATION - Speed: {dist.ToString("0.00")}/{currentMaxSpeed.ToString("0.00")} PrevMaxSpeed: {loggingPrevMaxMovementSpeed.ToString("0.00")}({loggingInertia}) FastTick: {FastTick} TimeSpam: {deltaTime.ToString("0.00")} Velocity: {velocity.ToString("0.00")} timeSinceLastAction: {timeSinceLastAction.ToString("0.00")} isMovingOrAnimating: {isMovingOrAnimating} actionsSinceLastMovementUpdate: {loggingHasPerformedActionsSinceLastMovementUpdate}");
+                                        }
+                                        //Session.Network.EnqueueSend(new GameMessageSystemChat($"Speed: {dist.ToString("0.00")}/{currentMaxSpeed.ToString("0.00")} PrevMaxSpeed: {loggingPrevMaxMovementSpeed.ToString("0.00")}({loggingInertia}) FastTick: {FastTick} TimeSpam: {deltaTime.ToString("0.00")} Velocity: {velocity.ToString("0.00")} timeSinceLastAction: {timeSinceLastAction.ToString("0.00")} isMovingOrAnimating: {isMovingOrAnimating} actionsSinceLastMovementUpdate: {loggingHasPerformedActionsSinceLastMovementUpdate}", ChatMessageType.Help));
+
+                                        Sequences.GetNextSequence(SequenceType.ObjectForcePosition);
+                                        SendUpdatePosition();
+                                        return false;
+                                    }
+                                }
+                                else
+                                {
+                                    // Kick players when they get to 10 enforcements in a minute.
+                                    Session.Terminate(SessionTerminationReason.ClientOutOfDate, new GameMessageBootAccount(" because the server and the client do not agree on your current location."));
+                                    return false;
+                                }
                             }
                             //else
                             //    Session.Network.EnqueueSend(new GameMessageSystemChat($"Speed: {dist.ToString("0.00")}/{currentMaxSpeed.ToString("0.00")} PrevMaxSpeed: {loggingPrevMaxMovementSpeed.ToString("0.00")}({loggingInertia}) FastTick: {FastTick} TimeSpam: {deltaTime.ToString("0.00")} Velocity: {velocity.ToString("0.00")} timeSinceLastAction: {timeSinceLastAction.ToString("0.00")} isMovingOrAnimating: {isMovingOrAnimating} actionsSinceLastMovementUpdate: {loggingHasPerformedActionsSinceLastMovementUpdate}", ChatMessageType.Broadcast));
