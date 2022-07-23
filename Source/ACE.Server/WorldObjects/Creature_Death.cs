@@ -234,7 +234,7 @@ namespace ACE.Server.WorldObjects
 
             double hitpointsXp = hitpoints / 10 * baseXp / 35;
 
-            double casterXp = baseXp * (numSpellInSpellbook / 20);
+            double casterXp = baseXp * ((float)numSpellInSpellbook / 20);
 
             return (int)Math.Round(baseXp + hitpointsXp + casterXp);
         }
