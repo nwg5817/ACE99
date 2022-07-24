@@ -28,8 +28,34 @@ namespace ACE.Server.Network.Handlers
 
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private static readonly ILog packetLog = LogManager.GetLogger(System.Reflection.Assembly.GetEntryAssembly(), "Packets");
-        private static List<string> vpnBlockedIPs = new List<string>();
-        private static List<string> vpnClearedIPs = new List<string>();
+        
+        private static List<string> _vpnBlockedIPs = null;
+        public static List<string> VpnBlockedIPs
+        {
+            get
+            {
+                if (_vpnBlockedIPs == null)
+                {
+                    _vpnBlockedIPs = new List<string>();
+                }
+
+                return _vpnBlockedIPs;
+            }
+        }
+
+        private static List<string> _vpnApprovedIPs = null;
+        public static List<string> VpnApprovedIPs
+        {
+            get
+            {
+                if (_vpnApprovedIPs == null)
+                {
+                    _vpnApprovedIPs = new List<string>();
+                }
+
+                return _vpnApprovedIPs;
+            }
+        }
 
         public static void HandleLoginRequest(ClientPacket packet, Session session)
         {
@@ -182,9 +208,9 @@ namespace ACE.Server.Network.Handlers
                     {
                         var currIp = session.EndPoint.Address.ToString();
                         bool isVpn = false;
-                        if (!vpnClearedIPs.Contains(currIp))
+                        if (!VpnApprovedIPs.Contains(currIp))
                         {
-                            if (vpnBlockedIPs.Contains(currIp))
+                            if (VpnBlockedIPs.Contains(currIp))
                             {
                                 isVpn = true;
                             }
@@ -194,11 +220,11 @@ namespace ACE.Server.Network.Handlers
                                 isVpn = CheckForVpn(currIp);
                                 if (isVpn)
                                 {
-                                    vpnBlockedIPs.Add(currIp);
+                                    VpnBlockedIPs.Add(currIp);
                                 }
                                 else
                                 {
-                                    vpnClearedIPs.Add(currIp);
+                                    VpnApprovedIPs.Add(currIp);
                                 }
                             }
                         }
@@ -320,9 +346,10 @@ namespace ACE.Server.Network.Handlers
                 task.Wait();
                 var ispInfo = task.Result;
 
-                if (ispInfo == null || (!String.IsNullOrEmpty(ispInfo.Proxy) && !ispInfo.Proxy.Equals("no")))
+                if (ispInfo != null && !String.IsNullOrEmpty(ispInfo.Proxy) && ispInfo.Proxy.Equals("yes"))
                 {
                     Console.WriteLine($"ISPInfo = {(ispInfo == null ? "NULL" : ispInfo.ToString())}");
+                    log.Warn($"VPN detected with ISPInfo = {ispInfo.ToString()}");
                     isVpn = true;
                 }
             }
@@ -333,6 +360,19 @@ namespace ACE.Server.Network.Handlers
 
             //Console.WriteLine($"AuthenticationHandler.CheckForVpn returning isVpn = {isVpn}");
             return isVpn;
+        }
+
+        public static void ClearVpnBlockedIPs()
+        {
+            VpnBlockedIPs.Clear();
+        }
+
+        public static void RemoveIpFromVpnBlockList(string ip)
+        {
+            if(VpnBlockedIPs.Contains(ip))
+            {
+                VpnBlockedIPs.Remove(ip);
+            }
         }
     }
 }

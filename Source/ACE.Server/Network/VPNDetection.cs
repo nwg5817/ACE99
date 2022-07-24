@@ -6,6 +6,7 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Text.Json;
 using ACE.Server.Managers;
+using log4net;
 
 namespace ACE.Server.Network
 {
@@ -32,6 +33,8 @@ namespace ACE.Server.Network
 
     public static class VPNDetection
     {
+        private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         public static string ApiKey { get; set; } = PropertyManager.GetString("proxycheck_api_key").Item;
 
         public static async Task<ISPInfo> CheckVPN(string ip)
@@ -49,7 +52,7 @@ namespace ACE.Server.Network
             var task = req.GetResponseAsync();
             if (!(await Task.WhenAny(task, Task.Delay(3000)) == task))
             {
-                //Console.WriteLine("VPNDetection.CheckVPN task timed out");
+                log.Warn($"VPNDetection.CheckVPN task timed out for ip = {ip}");
                 return null; //timed out
             }
             var resp = task.Result;
@@ -81,6 +84,10 @@ namespace ACE.Server.Network
                         Type = d["type"]
                     };
 
+                    if(!string.IsNullOrEmpty(ispinfo.Proxy) && ispinfo.Proxy.ToLower().Equals("yes"))
+                    {
+                        log.Debug($"VPN detected for ip = {ip} with ISPInfo = {ispinfo.ToString()}");
+                    }
                     //Console.WriteLine($"VPNDetection.CheckVPN returning ISPInfo = {ispinfo.ToString()}");
                     return ispinfo;
                 }
