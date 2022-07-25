@@ -161,6 +161,22 @@ namespace ACE.Server.WorldObjects
             // Make sure UpdateXpAndLevel is done on this players thread
             EnqueueAction(new ActionEventDelegate(() => UpdateXpAndLevel(amount, xpType)));
 
+            //Update XP tracking info
+            try
+            {
+                if (!XpTrackerStartTimestamp.HasValue)
+                {
+                    XpTrackerStartTimestamp = ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds();
+                    XpTrackerTotalXp = 0;
+                }
+
+                XpTrackerTotalXp += amount;
+            }
+            catch (Exception ex)
+            {
+                log.Error($"Exception in Player.GrantXP while updating XP tracking info. Ex: {ex}");
+            }
+
             // for passing XP up the allegiance chain,
             // this function is only called at the very beginning, to start the process.
             if (shareType.HasFlag(ShareType.Allegiance))

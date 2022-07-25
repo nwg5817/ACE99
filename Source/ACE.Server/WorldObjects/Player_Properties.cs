@@ -428,6 +428,18 @@ namespace ACE.Server.WorldObjects
             set { if (value == null) RemoveProperty(PropertyString.Afk); else SetProperty(PropertyString.Afk, value); }
         }
 
+        public long? XpTrackerStartTimestamp
+        {
+            get => GetProperty(PropertyInt64.XpTrackerStartTimestamp);
+            set { if (!value.HasValue) RemoveProperty(PropertyInt64.XpTrackerStartTimestamp); else SetProperty(PropertyInt64.XpTrackerStartTimestamp, value.Value); }
+        }
+
+        public long? XpTrackerTotalXp
+        {
+            get => GetProperty(PropertyInt64.XpTrackerTotalXp);
+            set { if (!value.HasValue) RemoveProperty(PropertyInt64.XpTrackerTotalXp); else SetProperty(PropertyInt64.XpTrackerTotalXp, value.Value); }
+        }
+
         // ========================================
         // ===== Player Properties - Titles========
         // ========================================

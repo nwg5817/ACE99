@@ -446,7 +446,7 @@ namespace ACE.Server.Command.Handlers
             var w = "";
             var g = "";
 
-            if (cg == "creature" || cg == "npc"|| cg == "item" || cg == "item")
+            if (cg == "creature" || cg == "npc" || cg == "item" || cg == "item")
             {
                 var objectId = new ObjectGuid();
                 if (session.Player.HealthQueryTarget.HasValue || session.Player.ManaQueryTarget.HasValue || session.Player.CurrentAppraisalTarget.HasValue)
@@ -579,9 +579,9 @@ namespace ACE.Server.Command.Handlers
             }
 
             List<ActivityRecommendation> validRecommendations = new List<ActivityRecommendation>();
-            foreach(var recommendation in Recommendations)
+            foreach (var recommendation in Recommendations)
             {
-                if(recommendation.IsApplicable(session.Player))
+                if (recommendation.IsApplicable(session.Player))
                 {
                     validRecommendations.Add(recommendation);
                 }
@@ -598,94 +598,135 @@ namespace ACE.Server.Command.Handlers
                 }
             }
         }
-    }
 
-    public class ActivityRecommendation
-    {
-        public HashSet<Skill> Skills = new HashSet<Skill>();
-        public int MinLevel = 0;
-        public int MaxLevel = int.MaxValue;
-        public int MinSkill = 0;
-        public int MaxSkill = int.MaxValue;
-        public HashSet<string> QuestFlags = new HashSet<string>();
-        public string RecommendationText;
-
-        public ActivityRecommendation(int minLevel, int maxLevel, string recommendation)
-            : this(minLevel, maxLevel, new HashSet<Skill>(), 0, int.MaxValue, new HashSet<string>(), recommendation) { }
-
-        public ActivityRecommendation(int minLevel, int maxLevel, Skill skill, string recommendation)
-            : this(minLevel, maxLevel, new HashSet<Skill> { skill }, 0, int.MaxValue, new HashSet<string>(), recommendation) { }
-
-        public ActivityRecommendation(int minLevel, int maxLevel, HashSet<Skill> skills, string recommendation)
-            : this(minLevel, maxLevel, skills, 0, int.MaxValue, new HashSet<string>(), recommendation) { }
-
-        public ActivityRecommendation(int minLevel, int maxLevel, string questFlag, string recommendation)
-            : this(minLevel, maxLevel, new HashSet<Skill>(), 0, int.MaxValue, new HashSet<string> { questFlag }, recommendation) { }
-
-        public ActivityRecommendation(int minLevel, int maxLevel, HashSet<string> questFlags, string recommendation)
-            : this(minLevel, maxLevel, new HashSet<Skill>(), 0, int.MaxValue, questFlags, recommendation) { }
-
-        public ActivityRecommendation(int minLevel, int maxLevel, Skill skill, int minSkill, int maxSkill, string recommendation)
-            : this(minLevel, maxLevel, new HashSet<Skill> { skill }, minSkill, maxSkill, new HashSet<string>(), recommendation) { }
-
-        public ActivityRecommendation(int minLevel, int maxLevel, Skill skill, string questFlag, string recommendation)
-            : this(minLevel, maxLevel, new HashSet<Skill> { skill }, 0, int.MaxValue, new HashSet<string> { questFlag }, recommendation) { }
-
-        public ActivityRecommendation(int minLevel, int maxLevel, Skill skill, HashSet<string> questFlags, string recommendation)
-            : this(minLevel, maxLevel, new HashSet<Skill> { skill }, 0, int.MaxValue, questFlags, recommendation) { }
-
-        public ActivityRecommendation(int minLevel, int maxLevel, Skill skill, int minSkill, int maxSkill, string questFlag, string recommendation)
-            : this(minLevel, maxLevel, new HashSet<Skill> { skill }, minSkill, maxSkill, new HashSet<string> { questFlag }, recommendation) { }
-
-        public ActivityRecommendation(int minLevel, int maxLevel, HashSet<Skill> skills, int minSkill, int maxSkill, HashSet<string> questFlags, string recommendation)
+        [CommandHandler("xptracker", AccessLevel.Player, CommandHandlerFlag.RequiresWorld, 0, "Return XP tracking information.", "<reset>")]
+        public static void HandleXpTracker(Session session, params string[] parameters)
         {
-            MinLevel = minLevel;
-            MaxLevel = maxLevel;
-            Skills = skills;
-            MinSkill = minSkill;
-            MaxSkill = maxSkill;
-            QuestFlags = questFlags;
-            RecommendationText = recommendation;
-        }
+            bool reset = false;
+            if (parameters.Length > 0)
+                reset = parameters[0].ToLower() == "reset";
 
-        public bool IsApplicable(Player player)
-        {
-            if (player.Level < MinLevel || player.Level > MaxLevel)
-                return false;
-
-            foreach (var questFlag in QuestFlags)
+            if (!reset)
             {
-                if (!player.QuestManager.CanSolve(questFlag))
-                    return false;
-            }
-
-            if (Skills.Count == 0)
-                return true;
-
-            foreach (var skill in Skills)
-            {
-                var playerSkill = player.GetCreatureSkill(player.ConvertToMoASkill(skill));
-                if (playerSkill.AdvancementClass == SkillAdvancementClass.Trained || playerSkill.AdvancementClass == SkillAdvancementClass.Specialized)
+                if (!session.Player.XpTrackerStartTimestamp.HasValue || !session.Player.XpTrackerTotalXp.HasValue)
                 {
-                    if (playerSkill.Current >= MinSkill && playerSkill.Current <= MaxSkill)
-                        return true;
+                    session.Player.XpTrackerStartTimestamp = ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds();
+                    session.Player.XpTrackerTotalXp = 0;
+                    session.Network.EnqueueSend(new GameMessageSystemChat($"XP tracking has been enabled for your character.\n", ChatMessageType.Broadcast));
+                    return;
+                }
+
+                var currUnixTimestamp = ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds();
+                var durationSeconds = currUnixTimestamp - session.Player.XpTrackerStartTimestamp.Value;
+
+                if (session.Player.XpTrackerTotalXp.Value > 0 && durationSeconds > 0)
+                {
+                    var durationTimespan = TimeSpan.FromSeconds(durationSeconds);
+                    var xpPerSecond = session.Player.XpTrackerTotalXp.Value / (double)(durationSeconds);
+                    var xpPerHour = xpPerSecond * 60 * 60;
+                    var msg = $"You've earned {String.Format("{0:0,0}", session.Player.XpTrackerTotalXp.Value)} XP in {durationTimespan.Hours} hr, {(durationTimespan.Minutes)} min, {durationTimespan.Seconds} sec \nfor {String.Format("{0:0,0}", xpPerHour)} XP/hr.";
+                    session.Network.EnqueueSend(new GameMessageSystemChat(msg, ChatMessageType.Broadcast));
+                }
+                else
+                {
+                    session.Network.EnqueueSend(new GameMessageSystemChat("No XP has been tracked for your character yet.", ChatMessageType.Broadcast));
                 }
             }
-
-            return false;
-        }
-
-        [CommandHandler("taunt", AccessLevel.Player, CommandHandlerFlag.RequiresWorld, "Toggles taunting opponents.")]
-        public static void HandleTaunt(Session session, params string[] parameters)
-        {
-            if (Common.ConfigManager.Config.Server.WorldRuleset != Common.Ruleset.CustomDM)
-                session.Network.EnqueueSend(new GameMessageSystemChat($"Unknown command: taunt", ChatMessageType.Help));
             else
             {
-                if (session.Player.ToggleTauntSetting())
-                    session.Network.EnqueueSend(new GameMessageSystemChat($"You will now start attempting to taunt opponents into attacking you.", ChatMessageType.Broadcast));
+                session.Player.XpTrackerStartTimestamp = ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds();
+                session.Player.XpTrackerTotalXp = 0;
+                session.Network.EnqueueSend(new GameMessageSystemChat($"Your character's xp tracking data has been reset.\n", ChatMessageType.Broadcast));
+            }
+        }
+
+        public class ActivityRecommendation
+        {
+            public HashSet<Skill> Skills = new HashSet<Skill>();
+            public int MinLevel = 0;
+            public int MaxLevel = int.MaxValue;
+            public int MinSkill = 0;
+            public int MaxSkill = int.MaxValue;
+            public HashSet<string> QuestFlags = new HashSet<string>();
+            public string RecommendationText;
+
+            public ActivityRecommendation(int minLevel, int maxLevel, string recommendation)
+                : this(minLevel, maxLevel, new HashSet<Skill>(), 0, int.MaxValue, new HashSet<string>(), recommendation) { }
+
+            public ActivityRecommendation(int minLevel, int maxLevel, Skill skill, string recommendation)
+                : this(minLevel, maxLevel, new HashSet<Skill> { skill }, 0, int.MaxValue, new HashSet<string>(), recommendation) { }
+
+            public ActivityRecommendation(int minLevel, int maxLevel, HashSet<Skill> skills, string recommendation)
+                : this(minLevel, maxLevel, skills, 0, int.MaxValue, new HashSet<string>(), recommendation) { }
+
+            public ActivityRecommendation(int minLevel, int maxLevel, string questFlag, string recommendation)
+                : this(minLevel, maxLevel, new HashSet<Skill>(), 0, int.MaxValue, new HashSet<string> { questFlag }, recommendation) { }
+
+            public ActivityRecommendation(int minLevel, int maxLevel, HashSet<string> questFlags, string recommendation)
+                : this(minLevel, maxLevel, new HashSet<Skill>(), 0, int.MaxValue, questFlags, recommendation) { }
+
+            public ActivityRecommendation(int minLevel, int maxLevel, Skill skill, int minSkill, int maxSkill, string recommendation)
+                : this(minLevel, maxLevel, new HashSet<Skill> { skill }, minSkill, maxSkill, new HashSet<string>(), recommendation) { }
+
+            public ActivityRecommendation(int minLevel, int maxLevel, Skill skill, string questFlag, string recommendation)
+                : this(minLevel, maxLevel, new HashSet<Skill> { skill }, 0, int.MaxValue, new HashSet<string> { questFlag }, recommendation) { }
+
+            public ActivityRecommendation(int minLevel, int maxLevel, Skill skill, HashSet<string> questFlags, string recommendation)
+                : this(minLevel, maxLevel, new HashSet<Skill> { skill }, 0, int.MaxValue, questFlags, recommendation) { }
+
+            public ActivityRecommendation(int minLevel, int maxLevel, Skill skill, int minSkill, int maxSkill, string questFlag, string recommendation)
+                : this(minLevel, maxLevel, new HashSet<Skill> { skill }, minSkill, maxSkill, new HashSet<string> { questFlag }, recommendation) { }
+
+            public ActivityRecommendation(int minLevel, int maxLevel, HashSet<Skill> skills, int minSkill, int maxSkill, HashSet<string> questFlags, string recommendation)
+            {
+                MinLevel = minLevel;
+                MaxLevel = maxLevel;
+                Skills = skills;
+                MinSkill = minSkill;
+                MaxSkill = maxSkill;
+                QuestFlags = questFlags;
+                RecommendationText = recommendation;
+            }
+
+            public bool IsApplicable(Player player)
+            {
+                if (player.Level < MinLevel || player.Level > MaxLevel)
+                    return false;
+
+                foreach (var questFlag in QuestFlags)
+                {
+                    if (!player.QuestManager.CanSolve(questFlag))
+                        return false;
+                }
+
+                if (Skills.Count == 0)
+                    return true;
+
+                foreach (var skill in Skills)
+                {
+                    var playerSkill = player.GetCreatureSkill(player.ConvertToMoASkill(skill));
+                    if (playerSkill.AdvancementClass == SkillAdvancementClass.Trained || playerSkill.AdvancementClass == SkillAdvancementClass.Specialized)
+                    {
+                        if (playerSkill.Current >= MinSkill && playerSkill.Current <= MaxSkill)
+                            return true;
+                    }
+                }
+
+                return false;
+            }
+
+            [CommandHandler("taunt", AccessLevel.Player, CommandHandlerFlag.RequiresWorld, "Toggles taunting opponents.")]
+            public static void HandleTaunt(Session session, params string[] parameters)
+            {
+                if (Common.ConfigManager.Config.Server.WorldRuleset != Common.Ruleset.CustomDM)
+                    session.Network.EnqueueSend(new GameMessageSystemChat($"Unknown command: taunt", ChatMessageType.Help));
                 else
-                    session.Network.EnqueueSend(new GameMessageSystemChat($"You will no longer attempt to taunt opponents.", ChatMessageType.Broadcast));
+                {
+                    if (session.Player.ToggleTauntSetting())
+                        session.Network.EnqueueSend(new GameMessageSystemChat($"You will now start attempting to taunt opponents into attacking you.", ChatMessageType.Broadcast));
+                    else
+                        session.Network.EnqueueSend(new GameMessageSystemChat($"You will no longer attempt to taunt opponents.", ChatMessageType.Broadcast));
+                }
             }
         }
     }
