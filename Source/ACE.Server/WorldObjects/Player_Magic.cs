@@ -851,6 +851,8 @@ namespace ACE.Server.WorldObjects
                 //player.Session.Network.EnqueueSend(new GameEventWeenieError(player.Session, WeenieError.YouHaveMovedTooFar));
                 Session.Network.EnqueueSend(new GameMessageSystemChat("Your movement disrupted spell casting!", ChatMessageType.Magic));
 
+                EnqueueBroadcast(new GameMessageScript(Guid, PlayScript.Fizzle, 0.5f));
+
                 if (finishCast)
                     FinishCast();
 
