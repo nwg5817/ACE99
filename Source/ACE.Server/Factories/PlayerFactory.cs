@@ -15,6 +15,7 @@ using ACE.Server.WorldObjects;
 using ACE.Server.Managers;
 using ACE.Server.Entity;
 using ACE.Database.Models.Shard;
+using ACE.Common;
 
 namespace ACE.Server.Factories
 {
@@ -450,7 +451,23 @@ namespace ACE.Server.Factories
             }
             else
             {
-                switch (starterArea.Name)
+                var starterAreaName = starterArea.Name;
+                if (starterAreaName != "Shoushi" && starterAreaName != "Yaraq" && starterAreaName != "Holtburg")
+                {
+                    switch (ThreadSafeRandom.Next(1, 3))
+                    {
+                        case 1:
+                            starterAreaName = "Shoushi";
+                            break;
+                        case 2:
+                            starterAreaName = "Yaraq";
+                            break;
+                        case 3:
+                            starterAreaName = "Holtburg";
+                            break;
+                    }
+                }
+                switch (starterAreaName)
                 {
                     case "Shoushi":
                         player.Location = new Position(0xDE51001D, 87.350517f, 114.857246f, 16.004999f, 0, 0, 0.537665f, 0.843159f);
@@ -459,7 +476,7 @@ namespace ACE.Server.Factories
                         player.Location = new Position(0x7D680012, 56.949219f, 29.860384f, 14.981730f, 0, 0, -0.879578f, 0.475755f);
                         break;
                     case "Holtburg":
-                    default: //redirect Sanamar to Holtburg as Sanamar is post-ToD.
+                    default:
                         player.Location = new Position(0xA9B00015, 53.780079f, 105.814995f, 64.005005f, 0, 0, -0.359575f, -0.933116f);
                         break;
                 }
