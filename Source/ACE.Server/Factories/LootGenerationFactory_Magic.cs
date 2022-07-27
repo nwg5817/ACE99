@@ -722,18 +722,19 @@ namespace ACE.Server.Factories
             {
                 HeritageGroup heritage = (HeritageGroup)ThreadSafeRandom.Next(1, 3);
 
+                wo.HeritageGroup = heritage;
                 switch (heritage)
                 {
                     case HeritageGroup.Aluvian:
-                        wo.HeritageGroup = HeritageGroup.Aluvian;
+                        wo.ItemHeritageGroupRestriction = "Aluvian";
                         break;
 
                     case HeritageGroup.Gharundim:
-                        wo.HeritageGroup = HeritageGroup.Gharundim;
+                        wo.ItemHeritageGroupRestriction = "Gharu'ndim";
                         break;
 
                     case HeritageGroup.Sho:
-                        wo.HeritageGroup = HeritageGroup.Sho;
+                        wo.ItemHeritageGroupRestriction = "Sho";
                         break;
                 }
                 return true;

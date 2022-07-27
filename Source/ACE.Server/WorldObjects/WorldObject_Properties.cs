@@ -1620,6 +1620,12 @@ namespace ACE.Server.WorldObjects
             set { if (value == null) RemoveProperty(PropertyString.HeritageGroup); else SetProperty(PropertyString.HeritageGroup, value); }
         }
 
+        public string ItemHeritageGroupRestriction
+        {
+            get => GetProperty(PropertyString.ItemHeritageGroupRestriction);
+            set { if (value == null) RemoveProperty(PropertyString.ItemHeritageGroupRestriction); else SetProperty(PropertyString.ItemHeritageGroupRestriction, value); }
+        }
+
         public string Sex
         {
             get => GetProperty(PropertyString.Sex);
