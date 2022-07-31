@@ -624,7 +624,7 @@ namespace ACE.Server.Command.Handlers
                     var durationTimespan = TimeSpan.FromSeconds(durationSeconds);
                     var xpPerSecond = session.Player.XpTrackerTotalXp.Value / (double)(durationSeconds);
                     var xpPerHour = xpPerSecond * 60 * 60;
-                    var msg = $"You've earned {String.Format("{0:0,0}", session.Player.XpTrackerTotalXp.Value)} XP in {durationTimespan.Hours} hr, {(durationTimespan.Minutes)} min, {durationTimespan.Seconds} sec \nfor {String.Format("{0:0,0}", xpPerHour)} XP/hr.";
+                    var msg = $"You've earned {String.Format("{0:0,0}", session.Player.XpTrackerTotalXp.Value)} XP in {durationTimespan.TotalHours} hr, {durationTimespan.Minutes} min, {durationTimespan.Seconds} sec \nfor {String.Format("{0:0,0}", xpPerHour)} XP/hr.";
                     session.Network.EnqueueSend(new GameMessageSystemChat(msg, ChatMessageType.Broadcast));
                 }
                 else
