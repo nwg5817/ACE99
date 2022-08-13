@@ -184,6 +184,27 @@ namespace ACE.Server.Network.Handlers
                 }
             }
 
+            string requiredClientVersionString;
+            switch (Common.ConfigManager.Config.Server.WorldRuleset)
+            {
+                default:
+                case Common.Ruleset.EoR:
+                    requiredClientVersionString = DatLoader.DatManager.CLIENT_VERSION_STRING;
+                    break;
+                case Common.Ruleset.Infiltration:
+                    requiredClientVersionString = DatLoader.DatManager.INFILTRATION_CLIENT_VERSION_STRING;
+                    break;
+                case Common.Ruleset.CustomDM:
+                    requiredClientVersionString = DatLoader.DatManager.CUSTOMDM_CLIENT_VERSION_STRING;
+                    break;
+            }
+
+            if (loginRequest.ClientVersionString != requiredClientVersionString)
+            {
+                session.Terminate(SessionTerminationReason.ClientOutOfDate, new GameMessageBootAccount(" because you are not running the correct executable file version for this server"));
+                return;
+            }
+
             if (loginRequest.NetAuthType == NetAuthType.AccountPassword)
             {
                 if (!account.PasswordMatches(loginRequest.Password))
@@ -193,7 +214,7 @@ namespace ACE.Server.Network.Handlers
                     else
                         log.Debug($"client {loginRequest.Account} connected with non matching password so booting");
 
-                    session.Terminate(SessionTerminationReason.NotAuthorizedPasswordMismatch, new GameMessageBootAccount(" because the password entered for this account was not correct."));
+                    session.Terminate(SessionTerminationReason.NotAuthorizedPasswordMismatch, new GameMessageBootAccount(" because the password entered for this account was not correct"));
 
                     // TO-DO: temporary lockout of account preventing brute force password discovery
                     // exponential duration of lockout for targeted account
