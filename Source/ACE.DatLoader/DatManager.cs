@@ -19,11 +19,11 @@ namespace ACE.DatLoader
         private static int ITERATION_HIRES = 497;
         private static int ITERATION_LANGUAGE = 994;
 
-        public static string INFILTRATION_CLIENT_VERSION_STRING = "i100";
+        public static string INFILTRATION_CLIENT_VERSION_STRING = "i101";
         private static int INFILTRATION_ITERATION_CELL = 10001;
-        private static int INFILTRATION_ITERATION_PORTAL = 10004;
+        private static int INFILTRATION_ITERATION_PORTAL = 10005;
         private static int INFILTRATION_ITERATION_HIRES = 497;
-        private static int INFILTRATION_ITERATION_LANGUAGE = 10001;
+        private static int INFILTRATION_ITERATION_LANGUAGE = 10002;
 
         public static string CUSTOMDM_CLIENT_VERSION_STRING = "c100";
         private static int CUSTOMDM_ITERATION_CELL = 20001;
@@ -129,7 +129,7 @@ namespace ACE.DatLoader
                 count = HighResDat.AllFiles.Count;
                 log.Info($"Successfully opened {datFile} file, containing {count} records, iteration {HighResDat.Iteration}");
                 if (HighResDat.Iteration != highResExpectedIteration)
-                    log.Warn($"{datFile} iteration does not match expected iteration version of {highResExpectedIteration}.");
+                    log.Warn($"{datFile} iteration {HighResDat.Iteration} does not match expected iteration version of {highResExpectedIteration}.");
             }
 
             try
@@ -139,7 +139,7 @@ namespace ACE.DatLoader
                 count = LanguageDat.AllFiles.Count;
                 log.Info($"Successfully opened {datFile} file, containing {count} records, iteration {LanguageDat.Iteration}");
                 if (LanguageDat.Iteration != languageExpectedIteration)
-                    log.Warn($"{datFile} iteration does not match expected version of {languageExpectedIteration}.");
+                    log.Warn($"{datFile} iteration {LanguageDat.Iteration} does not match expected version of {languageExpectedIteration}.");
             }
             catch (FileNotFoundException ex)
             {
