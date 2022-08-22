@@ -4312,6 +4312,11 @@ namespace ACE.Server.Physics
 
             //Console.WriteLine($"{Name}.update_object_server({forcePos}) - deltaTime: {deltaTime}");
 
+            var minDistCheck = Position.DistanceSquared(RequestPos);
+
+            if (minDistCheck < PhysicsGlobals.EpsilonSq)
+                return false;
+
             var success = true;
             var isTeleport = WeenieObj.WorldObject?.Teleporting ?? false;
             // for teleport, use SetPosition?
@@ -4343,6 +4348,8 @@ namespace ACE.Server.Physics
                     success = false;
                 }
 
+                var minterp = get_minterp();
+
                 Transition transit = null;
                 while (deltaTime > PhysicsGlobals.MaxQuantum)
                 {
@@ -4361,7 +4368,16 @@ namespace ACE.Server.Physics
 
                 RequestPos.ObjCellID = requestCell;
 
-                if (success)
+                var hasForwardOrBackwardsMovement = minterp.RawState.ForwardCommand != (uint)MotionCommand.Ready;
+                var isSideStepping = minterp.RawState.SideStepCommand != (uint)MotionCommand.Invalid;
+
+                bool hasNonAutonomousMovement = false;
+                var player = WeenieObj.WorldObject as Player;
+                if(player != null)
+                    hasNonAutonomousMovement = player.IsMoving || player.IsPlayerMovingTo || player.IsPlayerMovingTo2;
+
+                //if (success)
+                if (success && (hasForwardOrBackwardsMovement || isSideStepping || hasNonAutonomousMovement))
                 {
                     var valid = false;
                     float dist = 0;
@@ -4381,7 +4397,6 @@ namespace ACE.Server.Physics
                             valid = true;
                     }
 
-                    var player = WeenieObj.WorldObject as Player;
                     if (valid || forcePos || player?.GodState != null)
                     {
                         if (transit != null && needCollisions)
