@@ -4376,7 +4376,7 @@ namespace ACE.Server.Physics
                     hasNonAutonomousMovement = player.IsMoving || player.IsPlayerMovingTo || player.IsPlayerMovingTo2;
 
                 //if (success)
-                if (success && (hasForwardOrBackwardsMovement || isSideStepping || hasNonAutonomousMovement))
+                if (success && (forcePos || hasForwardOrBackwardsMovement || isSideStepping || hasNonAutonomousMovement))
                 {
                     var valid = false;
                     float dist = 0;
