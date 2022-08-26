@@ -19,13 +19,13 @@ namespace ACE.DatLoader
         private static int ITERATION_HIRES = 497;
         private static int ITERATION_LANGUAGE = 994;
 
-        public static string INFILTRATION_CLIENT_VERSION_STRING = "i102";
+        public static string INFILTRATION_CLIENT_VERSION_STRING = "i103";
         private static int INFILTRATION_ITERATION_CELL = 10001;
         private static int INFILTRATION_ITERATION_PORTAL = 10005;
         private static int INFILTRATION_ITERATION_HIRES = 497;
         private static int INFILTRATION_ITERATION_LANGUAGE = 10002;
 
-        public static string CUSTOMDM_CLIENT_VERSION_STRING = "c100";
+        public static string CUSTOMDM_CLIENT_VERSION_STRING = "c104";
         private static int CUSTOMDM_ITERATION_CELL = 20001;
         private static int CUSTOMDM_ITERATION_PORTAL = 20001;
         private static int CUSTOMDM_ITERATION_HIRES = 497;
@@ -38,11 +38,6 @@ namespace ACE.DatLoader
 
         public static void Initialize(string datFileDirectory, bool keepOpen = false, bool loadCell = true)
         {
-            string cellFilename;
-            string portalFilename;
-            string highResFilename;
-            string languageFilename;
-
             int cellExpectedIteration;
             int portalExpectedIteration;
             int highResExpectedIteration;
@@ -52,33 +47,18 @@ namespace ACE.DatLoader
             {
                 default:
                 case Common.Ruleset.EoR:
-                    cellFilename = "client_cell_1.dat";
-                    portalFilename = "client_portal.dat";
-                    highResFilename = "client_highres.dat";
-                    languageFilename = "client_local_English.dat";
-
                     cellExpectedIteration = ITERATION_CELL;
                     portalExpectedIteration = ITERATION_PORTAL;
                     highResExpectedIteration = ITERATION_HIRES;
                     languageExpectedIteration = ITERATION_LANGUAGE;
                     break;
                 case Common.Ruleset.Infiltration:
-                    cellFilename = "infilt_cell_1.dat";
-                    portalFilename = "infilt_portal.dat";
-                    highResFilename = "infilt_highres.dat";
-                    languageFilename = "infilt_local_English.dat";
-
                     cellExpectedIteration = INFILTRATION_ITERATION_CELL;
                     portalExpectedIteration = INFILTRATION_ITERATION_PORTAL;
                     highResExpectedIteration = INFILTRATION_ITERATION_HIRES;
                     languageExpectedIteration = INFILTRATION_ITERATION_LANGUAGE;
                     break;
                 case Common.Ruleset.CustomDM:
-                    cellFilename = "custDM_cell_1.dat";
-                    portalFilename = "custDM_portal.dat";
-                    highResFilename = "custDM_highres.dat";
-                    languageFilename = "custDM_local_English.dat";
-
                     cellExpectedIteration = CUSTOMDM_ITERATION_CELL;
                     portalExpectedIteration = CUSTOMDM_ITERATION_PORTAL;
                     highResExpectedIteration = CUSTOMDM_ITERATION_HIRES;
@@ -92,7 +72,7 @@ namespace ACE.DatLoader
             {
                 try
                 {
-                    datFile = Path.Combine(datDir, cellFilename);
+                    datFile = Path.Combine(datDir, "client_cell_1.dat");
                     CellDat = new CellDatDatabase(datFile, keepOpen);
                     count = CellDat.AllFiles.Count;
                     log.Info($"Successfully opened {datFile} file, containing {count} records, iteration {CellDat.Iteration}");
@@ -108,7 +88,7 @@ namespace ACE.DatLoader
 
             try
             {
-                datFile = Path.Combine(datDir, portalFilename);
+                datFile = Path.Combine(datDir, "client_portal.dat");
                 PortalDat = new PortalDatDatabase(datFile, keepOpen);
                 count = PortalDat.AllFiles.Count;
                 log.Info($"Successfully opened {datFile} file, containing {count} records, iteration {PortalDat.Iteration}");
@@ -122,7 +102,7 @@ namespace ACE.DatLoader
             }
 
             // Load the client_highres.dat file. This is not required for ACE operation, so no exception needs to be generated.
-            datFile = Path.Combine(datDir, highResFilename);
+            datFile = Path.Combine(datDir, "client_highres.dat");
             if (File.Exists(datFile))
             {
                 HighResDat = new DatDatabase(datFile, keepOpen);
@@ -134,7 +114,7 @@ namespace ACE.DatLoader
 
             try
             {
-                datFile = Path.Combine(datDir, languageFilename);
+                datFile = Path.Combine(datDir, "client_local_English.dat");
                 LanguageDat = new LanguageDatDatabase(datFile, keepOpen);
                 count = LanguageDat.AllFiles.Count;
                 log.Info($"Successfully opened {datFile} file, containing {count} records, iteration {LanguageDat.Iteration}");
