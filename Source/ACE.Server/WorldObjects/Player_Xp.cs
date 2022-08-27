@@ -558,11 +558,7 @@ namespace ACE.Server.WorldObjects
                 // Since that time, the experience awarded by killing creatures has increased considerably.
                 // This means that a 5% vitae loss currently is much easier to work off now than it was in the past.
                 // In addition, the maximum cost to work off a point of vitae was capped at 12,500 experience points."
-
-                // That seems to imply the formula was also different, but for now we keep the same formula but add the xp cap.
-                var xp = (Math.Pow(level, 2.5) * 2.5 + 20.0) * Math.Pow(vitae, 5.0) + 0.5;
-
-                return Math.Min(xp, 12500);
+                return Math.Min((Math.Pow(level, 2) * 5 + 20) * Math.Pow(vitae, 5.0) + 0.5, 12500);
             }
         }
 
