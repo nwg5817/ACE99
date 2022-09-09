@@ -425,11 +425,11 @@ namespace ACE.Server.WorldObjects
         /// <summary>
         /// Create a corpse for both creatures and players currently
         /// </summary>
-        protected void CreateCorpse(DamageHistoryInfo killer)
+        protected void CreateCorpse(DamageHistoryInfo killer, bool hadVitae = false)
         {
             if (NoCorpse)
             {
-                if (killer.IsOlthoiPlayer) return;
+                if (killer != null && killer.IsOlthoiPlayer) return;
 
                 var loot = GenerateTreasure(killer, null);
 
@@ -524,7 +524,7 @@ namespace ACE.Server.WorldObjects
             if (player != null)
             {
                 corpse.SetPosition(PositionType.Location, corpse.Location);
-                var dropped = player.CalculateDeathItems(corpse);
+                var dropped = killer != null && killer.IsOlthoiPlayer ? player.CalculateDeathItems_Olthoi(corpse, hadVitae) : player.CalculateDeathItems(corpse);
                 corpse.RecalculateDecayTime(player);
 
                 if (dropped.Count > 0)
@@ -559,8 +559,10 @@ namespace ACE.Server.WorldObjects
             {
                 corpse.IsMonster = true;
 
-                if (!killer.IsOlthoiPlayer)
+                if (killer == null || !killer.IsOlthoiPlayer)
                     GenerateTreasure(killer, corpse);
+                else
+                    GenerateTreasure_Olthoi(killer, corpse);
 
                 if (killer != null && killer.IsPlayer && !killer.IsOlthoiPlayer)
                 {
@@ -681,6 +683,21 @@ namespace ACE.Server.WorldObjects
             }
 
             return droppedItems;
+        }
+
+        /// <summary>
+        /// Generates random amounts of slag on a corpse
+        /// when an OlthoiPlayer is the killer
+        /// </summary>
+        private void GenerateTreasure_Olthoi(DamageHistoryInfo killer, Corpse corpse)
+        {
+            if (DeathTreasure == null) return;
+
+            var slag = LootGenerationFactory.RollSlag(DeathTreasure);
+
+            if (slag == null) return;
+
+            corpse.TryAddToInventory(slag);
         }
 
         public void DoCantripLogging(DamageHistoryInfo killer, WorldObject wo)
