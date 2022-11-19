@@ -373,7 +373,7 @@ namespace ACE.Server.WorldObjects
             {
                 var cripplingBlowMod = GetCripplingBlowMod(skill);
 
-                critDamageMod = Math.Max(critDamageMod, cripplingBlowMod); 
+                critDamageMod = Math.Max(critDamageMod, cripplingBlowMod);
             }
             return critDamageMod;
         }

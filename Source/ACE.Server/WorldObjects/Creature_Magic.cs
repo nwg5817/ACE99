@@ -45,7 +45,15 @@ namespace ACE.Server.WorldObjects
             else
                 difficulty = spell.Level * 25;
 
-            var mana_conversion_skill = (uint)Math.Round(manaConversion.Current * GetWeaponManaConversionModifier(caster));
+            var robeManaConversionMod = 0.0;
+            if (Common.ConfigManager.Config.Server.WorldRuleset == Common.Ruleset.CustomDM)
+            {
+                var robe = EquippedObjects.Values.FirstOrDefault(e => e.CurrentWieldedLocation == EquipMask.Armor);
+                if (robe != null)
+                    robeManaConversionMod = robe.ManaConversionMod ?? 0;
+            }
+
+            var mana_conversion_skill = (uint)Math.Round(manaConversion.Current * (GetWeaponManaConversionModifier(caster) + robeManaConversionMod));
 
             var manaCost = GetManaCost(difficulty, baseCost, mana_conversion_skill);
 

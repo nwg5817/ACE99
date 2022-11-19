@@ -129,7 +129,8 @@ namespace ACE.Server.Factories
             }
             else if (roll.HasArmorLevel(wo))
             {
-                spells = ArmorSpells.Roll(profile);
+                if(roll.ArmorType != TreasureArmorType.Covenant || Common.ConfigManager.Config.Server.WorldRuleset != Common.Ruleset.CustomDM)
+                    spells = ArmorSpells.Roll(profile);
             }
             else if (roll.IsMeleeWeapon)
             {
@@ -149,7 +150,10 @@ namespace ACE.Server.Factories
                 return null;
             }
 
-            return RollSpellLevels(wo, profile, spells);
+            if(spells != null)
+                return RollSpellLevels(wo, profile, spells);
+            else
+                return null;
         }
 
         private static List<SpellId> RollSpellLevels(WorldObject wo, TreasureDeath profile, IEnumerable<SpellId> spells)

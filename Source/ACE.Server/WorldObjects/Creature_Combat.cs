@@ -523,7 +523,10 @@ namespace ACE.Server.WorldObjects
             {
                 var skill = GetCreatureSkill(Skill.UnarmedCombat).Current;
 
-                return (int)skill / 20;
+                if(ConfigManager.Config.Server.WorldRuleset == Common.Ruleset.CustomDM)
+                    return (int)skill / 10;
+                else
+                    return (int)skill / 20;
             }
             else
                 return 0;
@@ -634,6 +637,8 @@ namespace ACE.Server.WorldObjects
         public float GetAnimSpeed()
         {
             var quickness = Quickness.Current;
+            if (ConfigManager.Config.Server.WorldRuleset == Common.Ruleset.CustomDM && IsHumanoid && GetCurrentWeaponSkill() == Skill.UnarmedCombat)
+                quickness = (uint)(GetCreatureSkill(Skill.UnarmedCombat).Current * 0.66f);
             var weaponSpeed = GetWeaponSpeed(this);
 
             var divisor = 1.0 - (quickness / 300.0) + (weaponSpeed / 150.0);
@@ -1248,9 +1253,9 @@ namespace ACE.Server.WorldObjects
                 Proficiency.OnSuccessUse(sourceAsPlayer, skill, defenseSkill.Current);
 
             string spellType;
-            // 2/3 chance of the vulnerability being explicity of the type of attack that was used, otherwise random 1/3 for each type
+            // 1/5 chance of the vulnerability being explicity of the type of attack that was used, otherwise random 1/3 for each type
             SpellId spellId;
-            if (ThreadSafeRandom.Next(1, 3) != 3)
+            if (ThreadSafeRandom.Next(1, 5) != 5)
             {
                 switch (combatType)
                 {

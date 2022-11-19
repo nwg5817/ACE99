@@ -5,6 +5,7 @@ using System.Linq;
 using ACE.Common;
 using ACE.Database.Models.World;
 using ACE.Entity.Enum;
+using ACE.Entity.Enum.Properties;
 using ACE.Entity.Models;
 using ACE.Server.Factories.Entity;
 using ACE.Server.Factories.Enum;
@@ -43,6 +44,13 @@ namespace ACE.Server.Factories
                 wo.ItemCurMana = null;
                 wo.ItemSpellcraft = null;
                 wo.ItemDifficulty = null;
+
+                if (roll.IsClothArmor) // Non-magical robes do not need level requirements
+                {
+                    wo.RemoveProperty(PropertyInt.WieldRequirements);
+                    wo.RemoveProperty(PropertyInt.WieldSkillType);
+                    wo.RemoveProperty(PropertyInt.WieldDifficulty);
+                }
             }
             else
             {
