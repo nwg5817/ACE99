@@ -136,6 +136,33 @@ namespace ACE.Entity.Enum
                 ValidSkills.Add(Skill.UnarmedCombat);
                 ValidSkills.Add(Skill.Salvaging);
             }
+            else if (Common.ConfigManager.Config.Server.WorldRuleset == Common.Ruleset.Release)
+            {
+                ValidSkills.Remove(Skill.TwoHandedCombat);
+                ValidSkills.Remove(Skill.HeavyWeapons);
+                ValidSkills.Remove(Skill.LightWeapons);
+                ValidSkills.Remove(Skill.FinesseWeapons);
+                ValidSkills.Remove(Skill.MissileWeapons);
+                ValidSkills.Remove(Skill.Shield);
+                ValidSkills.Remove(Skill.DualWield);
+                ValidSkills.Remove(Skill.Recklessness);
+                ValidSkills.Remove(Skill.SneakAttack);
+                ValidSkills.Remove(Skill.DirtyFighting);
+                ValidSkills.Remove(Skill.VoidMagic);
+                ValidSkills.Remove(Skill.Summoning);
+                ValidSkills.Remove(Skill.Salvaging);
+
+                ValidSkills.Add(Skill.Axe);
+                ValidSkills.Add(Skill.Bow);
+                ValidSkills.Add(Skill.Crossbow);
+                ValidSkills.Add(Skill.Dagger);
+                ValidSkills.Add(Skill.Mace);
+                ValidSkills.Add(Skill.Spear);
+                ValidSkills.Add(Skill.Staff);
+                ValidSkills.Add(Skill.Sword);
+                ValidSkills.Add(Skill.ThrownWeapon);
+                ValidSkills.Add(Skill.UnarmedCombat);
+            }
             else if (Common.ConfigManager.Config.Server.WorldRuleset == Common.Ruleset.CustomDM)
             {
                 ValidSkills.Remove(Skill.TwoHandedCombat);

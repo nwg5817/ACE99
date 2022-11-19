@@ -197,6 +197,9 @@ namespace ACE.Server.Network.Handlers
                 case Common.Ruleset.CustomDM:
                     requiredClientVersionString = DatLoader.DatManager.CUSTOMDM_CLIENT_VERSION_STRING;
                     break;
+                case Common.Ruleset.Release:
+                    requiredClientVersionString = DatLoader.DatManager.INFILTRATION_CLIENT_VERSION_STRING;
+                    break;
             }
 
             if (loginRequest.ClientVersionString != requiredClientVersionString)

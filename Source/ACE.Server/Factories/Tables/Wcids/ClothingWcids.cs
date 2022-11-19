@@ -216,6 +216,75 @@ namespace ACE.Server.Factories.Tables.Wcids
                     ( WeenieClassName.slippers,      1.0f ),
                 };
             }
+            else if (Common.ConfigManager.Config.Server.WorldRuleset == Common.Ruleset.Release)
+            {
+                ClothingWcids_Aluvian = new ChanceTable<WeenieClassName>(ChanceTableType.Weight)
+                {
+                    ( WeenieClassName.shirt,        4.0f ),
+                    ( WeenieClassName.doublet,      4.0f ),
+                    ( WeenieClassName.tunic,        4.0f ),
+                    ( WeenieClassName.smock,        4.0f ),
+                    ( WeenieClassName.shirtbaggy,   4.0f ),
+                    ( WeenieClassName.tunicbaggy,   4.0f ),
+
+                    ( WeenieClassName.pants,        4.0f ),
+                    ( WeenieClassName.trousers,     4.0f ),
+                    ( WeenieClassName.breecheswide, 4.0f ),
+
+                    ( WeenieClassName.capcloth,     1.0f ),
+                    ( WeenieClassName.cowlcloth,    1.0f ),
+
+                    ( WeenieClassName.glovescloth,  1.0f ),
+
+                    ( WeenieClassName.shoes,        1.0f ),
+                };
+
+                ClothingWcids_Gharundim = new ChanceTable<WeenieClassName>(ChanceTableType.Weight)
+                {
+                    ( WeenieClassName.jerkin,        4.0f ),
+                    ( WeenieClassName.smock,         4.0f ),
+                    ( WeenieClassName.shirtloose,    4.0f ),
+                    ( WeenieClassName.shirtpuffy,    4.0f ),
+                    ( WeenieClassName.tunicpuffy,    4.0f ),
+                    ( WeenieClassName.tunicbaggy,    4.0f ),
+
+                    ( WeenieClassName.breechesbaggy, 4.0f ),
+                    ( WeenieClassName.pantsbaggy,    4.0f ),
+                    ( WeenieClassName.pantaloons,    4.0f ),
+
+                    ( WeenieClassName.capfez,        1.0f ),
+                    ( WeenieClassName.qafiya,        1.0f ),
+                    ( WeenieClassName.turban,        1.0f ),
+
+                    ( WeenieClassName.glovescloth,   1.0f ),
+
+                    ( WeenieClassName.sandals,       1.0f ),
+                    ( WeenieClassName.shoes,         1.0f ),
+                    ( WeenieClassName.slippers,      1.0f ),
+                };
+
+                ClothingWcids_Sho = new ChanceTable<WeenieClassName>(ChanceTableType.Weight)
+                {
+                    ( WeenieClassName.shirtbaggy,    4.0f ),
+                    ( WeenieClassName.shirtflared,   4.0f ),
+                    ( WeenieClassName.tunicflared,   4.0f ),
+                    ( WeenieClassName.doublet,       4.0f ),
+                    ( WeenieClassName.shirtloose,    4.0f ),
+                    ( WeenieClassName.tunicloose,    4.0f ),
+
+                    ( WeenieClassName.pantsflared,   4.0f ),
+                    ( WeenieClassName.breechesloose, 4.0f ),
+                    ( WeenieClassName.pantsloose,    4.0f ),
+
+                    ( WeenieClassName.capcloth,      1.0f ),
+                    ( WeenieClassName.capsho,        1.0f ),
+
+                    ( WeenieClassName.glovescloth,   1.0f ),
+
+                    ( WeenieClassName.shoes,         1.0f ),
+                    ( WeenieClassName.slippers,      1.0f ),
+                };
+            }
             else if (Common.ConfigManager.Config.Server.WorldRuleset == Common.Ruleset.CustomDM)
             {
                 ClothingWcids_Aluvian = new ChanceTable<WeenieClassName>(ChanceTableType.Weight)

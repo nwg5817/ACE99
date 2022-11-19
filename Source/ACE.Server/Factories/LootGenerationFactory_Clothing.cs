@@ -208,7 +208,7 @@ namespace ACE.Server.Factories
         {
             if (Common.ConfigManager.Config.Server.WorldRuleset <= Common.Ruleset.Infiltration)
             {
-                string ruleset = Common.ConfigManager.Config.Server.WorldRuleset == Common.Ruleset.Infiltration ? "Infiltration" : "CustomDM";
+                string ruleset = Common.ConfigManager.Config.Server.WorldRuleset == Common.Ruleset.Infiltration ? "Infiltration" : "Release";
                 if (roll.ArmorType == TreasureArmorType.Covenant)
                 {
                     if (wo.IsShield)
@@ -636,7 +636,9 @@ namespace ACE.Server.Factories
 
         private static bool TryRollEquipmentSet(WorldObject wo, TreasureDeath profile, TreasureRoll roll)
         {
-            if (roll == null)
+            if (Common.ConfigManager.Config.Server.WorldRuleset == Common.Ruleset.Release)
+                return false;
+            else if (roll == null)
             {
                 if (!PropertyManager.GetBool("equipmentsetid_enabled").Item)
                     return false;
@@ -1014,6 +1016,9 @@ namespace ACE.Server.Factories
         private static bool TryMutateGearRating(WorldObject wo, TreasureDeath profile, TreasureRoll roll)
         {
             if (profile.Tier != 8)
+                return false;
+
+            if (Common.ConfigManager.Config.Server.WorldRuleset == Common.Ruleset.Release)
                 return false;
 
             // shields don't have gear ratings

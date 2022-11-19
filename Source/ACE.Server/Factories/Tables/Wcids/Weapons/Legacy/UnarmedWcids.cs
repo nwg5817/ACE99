@@ -170,6 +170,50 @@ namespace ACE.Server.Factories.Tables.Wcids
                     ( WeenieClassName.nekodefrost,    1.0f ),
                 };
             }
+            if (Common.ConfigManager.Config.Server.WorldRuleset == Common.Ruleset.Release)
+            {
+                UnarmedWcids_Aluvian_T1 = new ChanceTable<WeenieClassName>(ChanceTableType.Weight)
+                {
+                    ( WeenieClassName.cestus,         1.00f ),
+                };
+
+                UnarmedWcids_Aluvian = new ChanceTable<WeenieClassName>(ChanceTableType.Weight)
+                {
+                    ( WeenieClassName.cestus,         4.00f ),
+                    ( WeenieClassName.cestusacid,     1.00f ),
+                    ( WeenieClassName.cestuselectric, 1.00f ),
+                    ( WeenieClassName.cestusfire,     1.00f ),
+                    ( WeenieClassName.cestusfrost,    1.00f ),
+                };
+
+                UnarmedWcids_Gharundim_T1 = new ChanceTable<WeenieClassName>(ChanceTableType.Weight)
+                {
+                    ( WeenieClassName.katar,         1.00f ),
+                };
+
+                UnarmedWcids_Gharundim = new ChanceTable<WeenieClassName>(ChanceTableType.Weight)
+                {
+                    ( WeenieClassName.katar,         4.00f ),
+                    ( WeenieClassName.kataracid,     1.00f ),
+                    ( WeenieClassName.katarelectric, 1.00f ),
+                    ( WeenieClassName.katarfire,     1.00f ),
+                    ( WeenieClassName.katarfrost,    1.00f ),
+                };
+
+                UnarmedWcids_Sho_T1 = new ChanceTable<WeenieClassName>(ChanceTableType.Weight)
+                {
+                    ( WeenieClassName.nekode,         1.00f ),
+                };
+
+                UnarmedWcids_Sho = new ChanceTable<WeenieClassName>(ChanceTableType.Weight)
+                {
+                    ( WeenieClassName.nekode,         4.00f ),
+                    ( WeenieClassName.nekodeacid,     1.00f ),
+                    ( WeenieClassName.nekodeelectric, 1.00f ),
+                    ( WeenieClassName.nekodefire,     1.00f ),
+                    ( WeenieClassName.nekodefrost,    1.00f ),
+                };
+            }
 
             foreach (var entry in UnarmedWcids_Aluvian_T1)
                 _combined.TryAdd(entry.result, TreasureWeaponType.Unarmed);

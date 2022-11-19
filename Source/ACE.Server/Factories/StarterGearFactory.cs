@@ -24,6 +24,8 @@ namespace ACE.Server.Factories
             var starterGearFileName = "starterGear.json";
             if (Common.ConfigManager.Config.Server.WorldRuleset == Common.Ruleset.CustomDM)
                 starterGearFileName = "starterGear.customDM.json";
+            else if (Common.ConfigManager.Config.Server.WorldRuleset == Common.Ruleset.Release)
+                starterGearFileName = "starterGear.release.json";
             else if (Common.ConfigManager.Config.Server.WorldRuleset <= Common.Ruleset.Infiltration)
                 starterGearFileName = "starterGear.infiltration.json";
 

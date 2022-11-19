@@ -194,6 +194,50 @@ namespace ACE.Server.Factories.Tables.Wcids
                     ( WeenieClassName.jofrostnew,    1.0f ),
                 };
             }
+            else if (Common.ConfigManager.Config.Server.WorldRuleset == Common.Ruleset.Release)
+            {
+                StaffWcids_Aluvian_T1 = new ChanceTable<WeenieClassName>(ChanceTableType.Weight)
+                {
+                    ( WeenieClassName.quarterstaffnew,          1.0f ),
+                };
+
+                StaffWcids_Aluvian = new ChanceTable<WeenieClassName>(ChanceTableType.Weight)
+                {
+                    ( WeenieClassName.quarterstaffnew,         4.0f ),
+                    ( WeenieClassName.quarterstaffacidnew,     1.0f ),
+                    ( WeenieClassName.quarterstaffelectricnew, 1.0f ),
+                    ( WeenieClassName.quarterstaffflamenew,    1.0f ),
+                    ( WeenieClassName.quarterstafffrostnew,    1.0f ),
+                };
+
+                StaffWcids_Gharundim_T1 = new ChanceTable<WeenieClassName>(ChanceTableType.Weight)
+                {
+                    ( WeenieClassName.nabutnew,               1.0f ),
+                };
+
+                StaffWcids_Gharundim = new ChanceTable<WeenieClassName>(ChanceTableType.Weight)
+                {
+                    ( WeenieClassName.nabutnew,         4.0f ),
+                    ( WeenieClassName.nabutacidnew,     1.0f ),
+                    ( WeenieClassName.nabutelectricnew, 1.0f ),
+                    ( WeenieClassName.nabutfirenew,     1.0f ),
+                    ( WeenieClassName.nabutfrostnew,    1.0f ),
+                };
+
+                StaffWcids_Sho_T1 = new ChanceTable<WeenieClassName>(ChanceTableType.Weight)
+                {
+                    ( WeenieClassName.jonew,               1.0f ),
+                };
+
+                StaffWcids_Sho = new ChanceTable<WeenieClassName>(ChanceTableType.Weight)
+                {
+                    ( WeenieClassName.jonew,         4.0f ),
+                    ( WeenieClassName.joacidnew,     1.0f ),
+                    ( WeenieClassName.joelectricnew, 1.0f ),
+                    ( WeenieClassName.jofirenew,     1.0f ),
+                    ( WeenieClassName.jofrostnew,    1.0f ),
+                };
+            }
 
             foreach (var entry in StaffWcids_Aluvian_T1)
                 _combined.TryAdd(entry.result, TreasureWeaponType.Staff);

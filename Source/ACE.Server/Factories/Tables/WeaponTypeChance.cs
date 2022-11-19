@@ -162,6 +162,37 @@ namespace ACE.Server.Factories.Tables
                     ( TreasureWeaponType.Staff,           1.0f ),
                 };
             }
+            else if (Common.ConfigManager.Config.Server.WorldRuleset == Common.Ruleset.Release)
+            {
+                RetailChances = new ChanceTable<TreasureWeaponType>()
+                {
+                    // melee: 63%
+                    // missile: 27%
+                    // caster: 10%
+                    ( TreasureWeaponType.Sword,    0.09f ),
+                    ( TreasureWeaponType.Mace,     0.09f ),
+                    ( TreasureWeaponType.Axe,      0.09f ),
+                    ( TreasureWeaponType.Spear,    0.09f ),
+                    ( TreasureWeaponType.Unarmed,  0.09f ),
+                    ( TreasureWeaponType.Staff,    0.09f ),
+                    ( TreasureWeaponType.Dagger,   0.09f ),
+                    ( TreasureWeaponType.Bow,      0.09f ),
+                    ( TreasureWeaponType.Crossbow, 0.09f ),
+                    ( TreasureWeaponType.Atlatl,   0.09f ),
+                    ( TreasureWeaponType.Caster,   0.10f ),
+                };
+
+                MeleeChances = new ChanceTable<TreasureWeaponType>(ChanceTableType.Weight)
+                {
+                    ( TreasureWeaponType.Sword,           1.0f ),
+                    ( TreasureWeaponType.Mace,            1.0f ),
+                    ( TreasureWeaponType.Axe,             1.0f ),
+                    ( TreasureWeaponType.Spear,           1.0f ),
+                    ( TreasureWeaponType.Unarmed,         1.0f ),
+                    ( TreasureWeaponType.Staff,           1.0f ),
+                    ( TreasureWeaponType.Dagger,          1.0f ),
+                };
+            }
         }
 
         public static TreasureWeaponType Roll(int tier, TreasureWeaponType filterToType = TreasureWeaponType.Undef)

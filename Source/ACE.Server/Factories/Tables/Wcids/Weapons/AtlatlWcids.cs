@@ -175,6 +175,52 @@ namespace ACE.Server.Factories.Tables.Wcids
                     T6_T8_Chances,
                 };
             }
+            else if (Common.ConfigManager.Config.Server.WorldRuleset == Common.Ruleset.Release)
+            {
+                T1_Chances = new ChanceTable<WeenieClassName>(ChanceTableType.Weight)
+                {
+                    ( WeenieClassName.atlatl,      3.0f ),
+                    ( WeenieClassName.atlatlroyal, 1.0f ),
+                };
+
+                T5_Chances = new ChanceTable<WeenieClassName>(ChanceTableType.Weight)
+                {
+                    ( WeenieClassName.atlatl,                     4.0f ),
+                    ( WeenieClassName.atlatlroyal,                4.0f ),
+
+                    ( WeenieClassName.atlatlslashing,             1.0f ),
+                    ( WeenieClassName.atlatlpiercing,             1.0f ),
+                    ( WeenieClassName.atlatlblunt,                1.0f ),
+                    ( WeenieClassName.atlatlacid,                 1.0f ),
+                    ( WeenieClassName.atlatlfire,                 1.0f ),
+                    ( WeenieClassName.atlatlfrost,                1.0f ),
+                    ( WeenieClassName.atlatlelectric,             1.0f ),
+                };
+
+                T6_T8_Chances = new ChanceTable<WeenieClassName>(ChanceTableType.Weight)
+                {
+                    ( WeenieClassName.atlatlslashing,             1.0f ),
+                    ( WeenieClassName.atlatlpiercing,             1.0f ),
+                    ( WeenieClassName.atlatlblunt,                1.0f ),
+                    ( WeenieClassName.atlatlacid,                 1.0f ),
+                    ( WeenieClassName.atlatlfire,                 1.0f ),
+                    ( WeenieClassName.atlatlfrost,                1.0f ),
+                    ( WeenieClassName.atlatlelectric,             1.0f ),
+                };
+
+                // we have to refresh this list or it will still contain the previous values.
+                atlatlTiers = new List<ChanceTable<WeenieClassName>>()
+                {
+                    T1_Chances,
+                    T1_T4_Chances,
+                    T1_T4_Chances,
+                    T1_T4_Chances,
+                    T5_Chances,
+                    T6_T8_Chances,
+                    T6_T8_Chances,
+                    T6_T8_Chances,
+                };
+            }
             else if (Common.ConfigManager.Config.Server.WorldRuleset == Common.Ruleset.CustomDM)
             {
                 T1_Chances = new ChanceTable<WeenieClassName>(ChanceTableType.Weight)

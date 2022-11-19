@@ -64,6 +64,12 @@ namespace ACE.DatLoader
                     highResExpectedIteration = CUSTOMDM_ITERATION_HIRES;
                     languageExpectedIteration = CUSTOMDM_ITERATION_LANGUAGE;
                     break;
+                case Common.Ruleset.Release:
+                    cellExpectedIteration = INFILTRATION_ITERATION_CELL;
+                    portalExpectedIteration = INFILTRATION_ITERATION_PORTAL;
+                    highResExpectedIteration = INFILTRATION_ITERATION_HIRES;
+                    languageExpectedIteration = INFILTRATION_ITERATION_LANGUAGE;
+                    break;
             }
 
             var datDir = Path.GetFullPath(Path.Combine(datFileDirectory));

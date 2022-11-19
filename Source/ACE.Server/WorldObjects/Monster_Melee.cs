@@ -506,6 +506,8 @@ namespace ACE.Server.WorldObjects
         {
             if (Common.ConfigManager.Config.Server.WorldRuleset == Common.Ruleset.Infiltration)
                 return shieldLevel;
+            if (Common.ConfigManager.Config.Server.WorldRuleset == Common.Ruleset.Release)
+                return shieldLevel;
 
             if (shieldLevel == 0)
                 return 0;

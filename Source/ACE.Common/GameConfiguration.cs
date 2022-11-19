@@ -6,7 +6,7 @@ namespace ACE.Common
     public enum Ruleset
     {
         Invalid,
-        //Release,                // November 1999
+        Release,                // November 1999
         //DarkMajesty,            // October 2001
         CustomDM,
         Infiltration,           // February 2005

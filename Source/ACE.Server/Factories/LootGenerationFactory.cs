@@ -41,23 +41,23 @@ namespace ACE.Server.Factories
                     (  50,  100), // T1
                     ( 400, 1000), // T2
                     ( 800, 2000), // T3
-                    (1200, 4000), // T4
-                    (2000, 5000), // T5
-                    (2000, 5000), // T6
-                    (2000, 5000), // T7
-                    (2000, 5000), // T8
+                    (1200, 2400), // T4
+                    (1400, 2600), // T5
+                    (1600, 2800), // T6
+                    (1800, 3000), // T7
+                    (2000, 3200), // T8
                 };
 
                 ItemValue_TierMod = new List<int>()
                 {
-                    25,     // T1
-                    50,     // T2
-                    100,    // T3
-                    250,    // T4
-                    500,    // T5
-                    1000,   // T6
-                    2000,   // T7
-                    3000,   // T8
+                    25,    // T1
+                    50,    // T2
+                    65,    // T3
+                    80,    // T4
+                    95,    // T5
+                    110,   // T6
+                    125,   // T7
+                    140,   // T8
                 };
             }
             else if (Common.ConfigManager.Config.Server.WorldRuleset == Common.Ruleset.CustomDM)
@@ -67,6 +67,32 @@ namespace ACE.Server.Factories
                     ( 300,  600), // T1
                     ( 800, 2000), // T2
                     (1000, 2200), // T3
+                    (1200, 2400), // T4
+                    (1400, 2600), // T5
+                    (1600, 2800), // T6
+                    (1800, 3000), // T7
+                    (2000, 3200), // T8
+                };
+
+                ItemValue_TierMod = new List<int>()
+                {
+                    25,    // T1
+                    50,    // T2
+                    65,    // T3
+                    80,    // T4
+                    95,    // T5
+                    110,   // T6
+                    125,   // T7
+                    140,   // T8
+                };
+            }
+            else if (Common.ConfigManager.Config.Server.WorldRuleset == Common.Ruleset.Release)
+            {
+                coinRanges = new List<(int, int)>()
+                {
+                    (  50,  100), // T1
+                    ( 400, 1000), // T2
+                    ( 800, 2000), // T3
                     (1200, 2400), // T4
                     (1400, 2600), // T5
                     (1600, 2800), // T6
@@ -194,6 +220,28 @@ namespace ACE.Server.Factories
                 }
 
                 if (Common.ConfigManager.Config.Server.WorldRuleset == Common.Ruleset.Infiltration)
+                {
+                    // Fix for mismatched high tier containers and generators in low level places, CustomDM has these fixed in the data files themselves.
+                    switch (deathTreasureId)
+                    {
+                        case 4: deathTreasureId = 6; break;
+                        case 16: deathTreasureId = 18; break;
+                        case 313: deathTreasureId = 453; break;
+                        case 457: deathTreasureId = 459; break;
+                        case 463: deathTreasureId = 465; break;
+                        case 15: deathTreasureId = 18; break;
+                        case 462: deathTreasureId = 465; break;
+                        case 460: deathTreasureId = 462; break;
+
+                        case 3: deathTreasureId = 4; break;
+                        case 13: deathTreasureId = 16; break;
+                        case 454: deathTreasureId = 457; break;
+
+                        case 1: deathTreasureId = 3; break;
+                        case 456: deathTreasureId = 457; break;
+                    }
+                }
+                if (Common.ConfigManager.Config.Server.WorldRuleset == Common.Ruleset.Release)
                 {
                     // Fix for mismatched high tier containers and generators in low level places, CustomDM has these fixed in the data files themselves.
                     switch (deathTreasureId)

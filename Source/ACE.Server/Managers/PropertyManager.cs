@@ -516,6 +516,26 @@ namespace ACE.Server.Managers
 
                 PropertyManager.ModifyDouble("vendor_unique_rot_time", 1800);
             }
+            else if (Common.ConfigManager.Config.Server.WorldRuleset == Common.Ruleset.Release)
+            {
+                PropertyManager.ModifyBool("item_dispel", true);
+                PropertyManager.ModifyBool("vendor_shop_uses_generator", true);
+                PropertyManager.ModifyBool("allow_xp_at_max_level", true);
+
+                PropertyManager.ModifyLong("max_level", 126);
+
+                PropertyManager.ModifyBool("assess_creature_mod", true);
+                PropertyManager.ModifyBool("chat_disable_lfg", true);
+                PropertyManager.ModifyBool("chat_disable_roleplay", true);
+                PropertyManager.ModifyBool("chat_disable_trade", true);
+                PropertyManager.ModifyBool("chat_disable_olthoi", true);
+                PropertyManager.ModifyBool("equipmentsetid_enabled", false);
+                PropertyManager.ModifyDouble("cantrip_drop_rate", 0.0);
+                
+
+                PropertyManager.ModifyBool("show_dat_warning", true);
+                PropertyManager.ModifyString("dat_warning_msg", "The location you are attempting to enter is not present in your data files.");
+            }
         }
 
         // ==================================================================================

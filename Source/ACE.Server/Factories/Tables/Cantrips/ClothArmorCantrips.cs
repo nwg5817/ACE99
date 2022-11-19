@@ -31,6 +31,12 @@ namespace ACE.Server.Factories.Tables
                 {
                 };
             }
+            else if(Common.ConfigManager.Config.Server.WorldRuleset == Common.Ruleset.Release)
+            {
+                clothArmorCantrips = new ChanceTable<SpellId>(ChanceTableType.Weight)
+                {
+                };
+            }
             else if (Common.ConfigManager.Config.Server.WorldRuleset == Common.Ruleset.CustomDM)
             {
                 clothArmorCantrips = new ChanceTable<SpellId>(ChanceTableType.Weight)

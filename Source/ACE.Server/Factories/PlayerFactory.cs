@@ -224,7 +224,7 @@ namespace ACE.Server.Factories
                 }
 
                 var isDualWieldTrainedOrSpecialized = false;
-                if (Common.ConfigManager.Config.Server.WorldRuleset != Common.Ruleset.Infiltration)
+                if (Common.ConfigManager.Config.Server.WorldRuleset > Common.Ruleset.Infiltration)
                     isDualWieldTrainedOrSpecialized = player.Skills.TryGetValue(Skill.DualWield, out var dualWield) && dualWield.AdvancementClass > SkillAdvancementClass.Untrained;
 
                 if (Common.ConfigManager.Config.Server.WorldRuleset == Common.Ruleset.EoR)

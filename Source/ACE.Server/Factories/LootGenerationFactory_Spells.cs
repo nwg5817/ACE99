@@ -317,6 +317,9 @@ namespace ACE.Server.Factories
 
         private static List<SpellId> RollCantrips(WorldObject wo, TreasureDeath profile, TreasureRoll roll)
         {
+            // no cantrips on release
+            if (Common.ConfigManager.Config.Server.WorldRuleset == Common.Ruleset.Release)
+                return null;
             // no cantrips on dinnerware?
             if (roll.ItemType == TreasureItemType_Orig.ArtObject)
                 return null;

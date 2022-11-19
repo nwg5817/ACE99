@@ -622,11 +622,13 @@ namespace ACE.Server.WorldObjects
                     // does target have shield equipped?
                     var shield = target.GetEquippedShield();
                     if (shield != null && shield.GetAbsorbMagicDamage() != null)
-                 	{
-                        if (Common.ConfigManager.Config.Server.WorldRuleset != Common.Ruleset.Infiltration)
-                            return GetShieldMod(target, shield);
-                        else
+                    {
+                        if (Common.ConfigManager.Config.Server.WorldRuleset == Common.Ruleset.Release)
                             return AbsorbMagic(target, shield);
+                        if (Common.ConfigManager.Config.Server.WorldRuleset == Common.Ruleset.Infiltration)
+                            return AbsorbMagic(target, shield);
+                        else
+                            return GetShieldMod(target, shield);
                     }
 
                     break;

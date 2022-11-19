@@ -315,8 +315,8 @@ namespace ACE.Server.Factories
         {
             if (Common.ConfigManager.Config.Server.WorldRuleset <= Common.Ruleset.Infiltration)
             {
-                string ruleset = Common.ConfigManager.Config.Server.WorldRuleset == Common.Ruleset.Infiltration ? "Infiltration" : "CustomDM";
-                return $"MeleeWeapons.Damage_WieldDifficulty_DamageVariance.{ruleset}." + weaponType.GetScriptName() + ".txt";
+                    string ruleset = Common.ConfigManager.Config.Server.WorldRuleset == Common.Ruleset.Infiltration ? "Infiltration" : "Release";
+                    return $"MeleeWeapons.Damage_WieldDifficulty_DamageVariance.{ruleset}." + weaponType.GetScriptName() + ".txt";
             }
             else
                 return "MeleeWeapons.Damage_WieldDifficulty_DamageVariance." + weaponSkill.GetScriptName_Combined() + "_" + weaponType.GetScriptName() + ".txt";
@@ -326,7 +326,7 @@ namespace ACE.Server.Factories
         {
             if (Common.ConfigManager.Config.Server.WorldRuleset <= Common.Ruleset.Infiltration)
             {
-                string ruleset = Common.ConfigManager.Config.Server.WorldRuleset == Common.Ruleset.Infiltration ? "Infiltration" : "CustomDM";
+                string ruleset = Common.ConfigManager.Config.Server.WorldRuleset == Common.Ruleset.Infiltration ? "Infiltration" : "Release";
                 return $"MeleeWeapons.WeaponOffense_WeaponDefense.{ruleset}." + weaponType.GetScriptShortName() + "_offense_defense.txt";
             }
             else

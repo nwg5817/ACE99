@@ -240,7 +240,57 @@ namespace ACE.Server.Factories.Tables.Wcids
                     T1_T2_Chances,
                 };
             }
+            else if (Common.ConfigManager.Config.Server.WorldRuleset == Common.Ruleset.Release)
+            {
+                T1_Chances = new ChanceTable<WeenieClassName>(ChanceTableType.Weight)
+                {
+                    ( WeenieClassName.swordshort,           3.0f ),
+                    ( WeenieClassName.scimitar,             0.5f ),
+                    ( WeenieClassName.swordlong,            0.5f ),
+                    ( WeenieClassName.swordbroad,           0.5f ),
 
+                    ( WeenieClassName.swordrapier,          0.25f ),
+                };
+
+                T1_T2_Chances = new ChanceTable<WeenieClassName>(ChanceTableType.Weight)
+                {
+                    ( WeenieClassName.swordshort,         4.0f ),
+                    ( WeenieClassName.swordshortacid,     1.0f ),
+                    ( WeenieClassName.swordshortelectric, 1.0f ),
+                    ( WeenieClassName.swordshortfire,     1.0f ),
+                    ( WeenieClassName.swordshortfrost,    1.0f ),
+
+                    ( WeenieClassName.scimitar,           4.0f ),
+                    ( WeenieClassName.scimitaracid,       1.0f ),
+                    ( WeenieClassName.scimitarelectric,   1.0f ),
+                    ( WeenieClassName.scimitarfire,       1.0f ),
+                    ( WeenieClassName.scimitarfrost,      1.0f ),
+
+                    ( WeenieClassName.swordlong,          4.0f ),
+                    ( WeenieClassName.swordlongacid,      1.0f ),
+                    ( WeenieClassName.swordlongelectric,  1.0f ),
+                    ( WeenieClassName.swordlongfire,      1.0f ),
+                    ( WeenieClassName.swordlongfrost,     1.0f ),
+
+                    ( WeenieClassName.swordbroad,         4.0f ),
+                    ( WeenieClassName.swordbroadacid,     1.0f ),
+                    ( WeenieClassName.swordbroadelectric, 1.0f ),
+                    ( WeenieClassName.swordbroadfire,     1.0f ),
+                    ( WeenieClassName.swordbroadfrost,    1.0f ),
+
+                    ( WeenieClassName.swordrapier,        2.0f ),
+                };
+
+                weaponTiers = new List<ChanceTable<WeenieClassName>>()
+                {
+                    T1_Chances,
+                    T1_T2_Chances,
+                    T1_T2_Chances,
+                    T1_T2_Chances,
+                    T1_T2_Chances,
+                    T1_T2_Chances,
+                };
+            }
             foreach (var weaponTier in weaponTiers)
             {
                 foreach (var entry in weaponTier)

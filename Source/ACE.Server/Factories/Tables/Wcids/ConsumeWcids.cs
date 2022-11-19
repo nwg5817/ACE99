@@ -138,6 +138,40 @@ namespace ACE.Server.Factories.Tables.Wcids
                     T6_T8_Chances,
                 };
             }
+            else if (Common.ConfigManager.Config.Server.WorldRuleset == Common.Ruleset.Release)
+            {
+                T1_Chances = new ChanceTable<WeenieClassName>()
+                {
+                    ( WeenieClassName.apple,           0.06f ),
+                    ( WeenieClassName.bread,           0.06f ),
+                    ( WeenieClassName.cabbage,         0.05f ),
+                    ( WeenieClassName.cheese,          0.05f ),
+                    ( WeenieClassName.chicken,         0.05f ),
+                    ( WeenieClassName.egg,             0.05f ),
+                    ( WeenieClassName.fish,            0.05f ),
+                    ( WeenieClassName.grapes,          0.05f ),
+                    ( WeenieClassName.beefside,        0.05f ),
+                    ( WeenieClassName.mushroom,        0.05f ),
+                    ( WeenieClassName.healthdraught,   0.12f ),
+                    ( WeenieClassName.manadraught,     0.12f ),
+                    ( WeenieClassName.staminapotion,   0.12f ),
+                    ( WeenieClassName.healthpotion,    0.04f ),
+                    ( WeenieClassName.manapotion,      0.04f ),
+                    ( WeenieClassName.staminatincture, 0.04f ),
+                };
+
+                consumeTiers = new List<ChanceTable<WeenieClassName>>()
+                {
+                    T1_Chances,
+                    T2_Chances,
+                    T3_Chances,
+                    T4_Chances,
+                    T5_Chances,
+                    T6_T8_Chances,
+                    T6_T8_Chances,
+                    T6_T8_Chances,
+                };
+            }
             else if (Common.ConfigManager.Config.Server.WorldRuleset == Common.Ruleset.CustomDM)
             {
                 T1_Chances = new ChanceTable<WeenieClassName>(ChanceTableType.Weight)

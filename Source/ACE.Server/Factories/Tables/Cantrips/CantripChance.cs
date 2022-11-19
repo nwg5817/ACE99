@@ -285,7 +285,7 @@ namespace ACE.Server.Factories.Tables
 
         static CantripChance()
         {
-            if(Common.ConfigManager.Config.Server.WorldRuleset <= Common.Ruleset.Infiltration)
+            if (Common.ConfigManager.Config.Server.WorldRuleset <= Common.Ruleset.Infiltration)
             {
                 T1_NumCantrips = new ChanceTable<int>()
                 {

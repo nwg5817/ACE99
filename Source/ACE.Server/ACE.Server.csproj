@@ -30,6 +30,10 @@
     <PackageIcon>ace-retro-icon2.png</PackageIcon>
     <PackageIconUrl />
     <ApplicationIcon>images\ace_retro_icon_2.ico</ApplicationIcon>
+    <BaseOutputPath>C:\ACE\Server</BaseOutputPath>
+    <PlatformTarget>x64</PlatformTarget>
+    <BaseIntermediateOutputPath />
+    <PackageOutputPath>$(OutputPath)</PackageOutputPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -382,6 +386,40 @@
     <EmbeddedResource Include="Entity\Mutations\Recipes\3800004E - Sandstone.txt" />
     <EmbeddedResource Include="Entity\Mutations\Recipes\39000000 - Paragon Weapons.txt" />
     <EmbeddedResource Include="Entity\Mutations\Recipes\39000001 - Lucky White Rabbit's Foot.txt" />
+    <EmbeddedResource Include="Entity\Mutations\ArmorLevel\Release\armor_level.txt" />
+    <EmbeddedResource Include="Entity\Mutations\ArmorLevel\Release\covenant_armor_level.txt" />
+    <EmbeddedResource Include="Entity\Mutations\ArmorLevel\Release\covenant_shield_level.txt" />
+    <EmbeddedResource Include="Entity\Mutations\ArmorLevel\Release\shield_level.txt" />
+    <EmbeddedResource Include="Entity\Mutations\Casters\Release\caster.txt" />
+    <EmbeddedResource Include="Entity\Mutations\Casters\Release\caster_elemental.txt" />
+    <EmbeddedResource Include="Entity\Mutations\Casters\Release\caster_non_elemental.txt" />
+    <EmbeddedResource Include="Entity\Mutations\Casters\Release\weapon_defense.txt" />
+    <EmbeddedResource Include="Entity\Mutations\MeleeWeapons\Damage_WieldDifficulty_DamageVariance\Release\axe.txt" />
+    <EmbeddedResource Include="Entity\Mutations\MeleeWeapons\Damage_WieldDifficulty_DamageVariance\Release\dagger.txt" />
+    <EmbeddedResource Include="Entity\Mutations\MeleeWeapons\Damage_WieldDifficulty_DamageVariance\Release\dagger_ms.txt" />
+    <EmbeddedResource Include="Entity\Mutations\MeleeWeapons\Damage_WieldDifficulty_DamageVariance\Release\mace.txt" />
+    <EmbeddedResource Include="Entity\Mutations\MeleeWeapons\Damage_WieldDifficulty_DamageVariance\Release\spear.txt" />
+    <EmbeddedResource Include="Entity\Mutations\MeleeWeapons\Damage_WieldDifficulty_DamageVariance\Release\staff.txt" />
+    <EmbeddedResource Include="Entity\Mutations\MeleeWeapons\Damage_WieldDifficulty_DamageVariance\Release\sword.txt" />
+    <EmbeddedResource Include="Entity\Mutations\MeleeWeapons\Damage_WieldDifficulty_DamageVariance\Release\sword_ms.txt" />
+    <EmbeddedResource Include="Entity\Mutations\MeleeWeapons\Damage_WieldDifficulty_DamageVariance\Release\unarmed.txt" />
+    <EmbeddedResource Include="Entity\Mutations\MeleeWeapons\WeaponOffense_WeaponDefense\Release\axe_offense_defense.txt" />
+    <EmbeddedResource Include="Entity\Mutations\MeleeWeapons\WeaponOffense_WeaponDefense\Release\dagger_offense_defense.txt" />
+    <EmbeddedResource Include="Entity\Mutations\MeleeWeapons\WeaponOffense_WeaponDefense\Release\mace_offense_defense.txt" />
+    <EmbeddedResource Include="Entity\Mutations\MeleeWeapons\WeaponOffense_WeaponDefense\Release\spear_offense_defense.txt" />
+    <EmbeddedResource Include="Entity\Mutations\MeleeWeapons\WeaponOffense_WeaponDefense\Release\staff_offense_defense.txt" />
+    <EmbeddedResource Include="Entity\Mutations\MeleeWeapons\WeaponOffense_WeaponDefense\Release\sword_offense_defense.txt" />
+    <EmbeddedResource Include="Entity\Mutations\MeleeWeapons\WeaponOffense_WeaponDefense\Release\unarmed_offense_defense.txt" />
+    <EmbeddedResource Include="Entity\Mutations\MissileWeapons\Release\atlatl_elemental.txt" />
+    <EmbeddedResource Include="Entity\Mutations\MissileWeapons\Release\atlatl_non_elemental.txt" />
+    <EmbeddedResource Include="Entity\Mutations\MissileWeapons\Release\atlatl_regular_non_elemental.txt" />
+    <EmbeddedResource Include="Entity\Mutations\MissileWeapons\Release\bow_elemental.txt" />
+    <EmbeddedResource Include="Entity\Mutations\MissileWeapons\Release\bow_non_elemental.txt" />
+    <EmbeddedResource Include="Entity\Mutations\MissileWeapons\Release\bow_short_non_elemental.txt" />
+    <EmbeddedResource Include="Entity\Mutations\MissileWeapons\Release\crossbow_elemental.txt" />
+    <EmbeddedResource Include="Entity\Mutations\MissileWeapons\Release\crossbow_non_elemental.txt" />
+    <EmbeddedResource Include="Entity\Mutations\MissileWeapons\Release\crossbow_light_non_elemental.txt" />
+    <EmbeddedResource Include="Entity\Mutations\MissileWeapons\Release\weapon_defense.txt" />	
   </ItemGroup>
 
   <ItemGroup>

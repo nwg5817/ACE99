@@ -922,6 +922,8 @@ namespace ACE.Server.WorldObjects
         {
             if (Common.ConfigManager.Config.Server.WorldRuleset == Common.Ruleset.Infiltration)
                 return 1.0f;
+            else if (Common.ConfigManager.Config.Server.WorldRuleset == Common.Ruleset.Release)
+                return 1.0f;
             else if (Common.ConfigManager.Config.Server.WorldRuleset == Common.Ruleset.CustomDM)
             {
                 // ensure creature target
