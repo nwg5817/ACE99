@@ -751,28 +751,33 @@ namespace ACE.Server.WorldObjects
 
             // TransferCap caps both srcVitalChange and destVitalChange
             // https://asheron.fandom.com/wiki/Announcements_-_2003/01_-_The_Slumbering_Giant#Letter_to_the_Players
-
-            if (spell.TransferCap != 0 && srcVitalChange > spell.TransferCap)
+            if (Common.ConfigManager.Config.Server.WorldRuleset != Common.Ruleset.Release)
+            {                
+                if (spell.TransferCap != 0 && srcVitalChange > spell.TransferCap)
                 srcVitalChange = (uint)spell.TransferCap;
-
+            }
             // should healing resistances be applied here?
             var boostMod = isDrain ? (float)destination.GetResistanceMod(GetBoostResistanceType(spell.Destination)) : 1.0f;
 
             destVitalChange = (uint)Math.Round(srcVitalChange * (1.0f - spell.LossPercent) * boostMod);
 
             // scale srcVitalChange to destVitalChange?
-            var missingDest = destination.GetCreatureVital(spell.Destination).Missing;
-
-            var maxDestVitalChange = missingDest;
-            if (spell.TransferCap != 0 && maxDestVitalChange > spell.TransferCap)
-                maxDestVitalChange = (uint)spell.TransferCap;
-
-            if (destVitalChange > maxDestVitalChange)
+            if (Common.ConfigManager.Config.Server.WorldRuleset != Common.Ruleset.Release)
             {
-                var scalar = (float)maxDestVitalChange / destVitalChange;
+                var missingDest = destination.GetCreatureVital(spell.Destination).Missing;
 
-                srcVitalChange = (uint)Math.Round(srcVitalChange * scalar);
-                destVitalChange = maxDestVitalChange;
+                var maxDestVitalChange = missingDest;
+
+                if (spell.TransferCap != 0 && maxDestVitalChange > spell.TransferCap)
+                    maxDestVitalChange = (uint)spell.TransferCap;
+
+                if (destVitalChange > maxDestVitalChange)
+                {
+                    var scalar = (float)maxDestVitalChange / destVitalChange;
+
+                    srcVitalChange = (uint)Math.Round(srcVitalChange * scalar);
+                    destVitalChange = maxDestVitalChange;
+                }
             }
 
             // handle cloak damage procs for drain health other

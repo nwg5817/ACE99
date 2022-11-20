@@ -180,10 +180,11 @@ namespace ACE.Server.WorldObjects.Managers
 
                 // for the same void caster re-casting the same DoT,
                 // should be update the StatModVal here?
-
+                uint spellDurationLevel = (uint)PropertyManager.GetLong("spell_duration").Item;
                 var duration = spell.Duration;
                 if (caster is Player player && player.AugmentationIncreasedSpellDuration > 0 && !spell.IsDamageOverTime)
                     duration *= 1.0f + player.AugmentationIncreasedSpellDuration * 0.2f;
+                    duration *= 1.0f + spellDurationLevel * 0.2f;
 
                 var timeRemaining = refreshSpell.Duration + refreshSpell.StartTime;
 
@@ -221,6 +222,9 @@ namespace ACE.Server.WorldObjects.Managers
 
                 if (caster is Player player && player.AugmentationIncreasedSpellDuration > 0 && !spell.IsDamageOverTime)
                     entry.Duration *= 1.0f + player.AugmentationIncreasedSpellDuration * 0.2f;
+                uint spellDurationLevel = (uint)PropertyManager.GetLong("spell_duration").Item;
+                entry.Duration *= 1.0f + spellDurationLevel * 0.2f;
+
             }
             else
             {

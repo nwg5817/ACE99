@@ -522,6 +522,8 @@ namespace ACE.Server.Managers
                 PropertyManager.ModifyBool("vendor_shop_uses_generator", true);
                 PropertyManager.ModifyBool("allow_xp_at_max_level", true);
 
+                PropertyManager.ModifyBool("safe_spell_comps", true);
+                PropertyManager.ModifyLong("spell_duration", 5);
                 PropertyManager.ModifyLong("max_level", 126);
 
                 PropertyManager.ModifyBool("assess_creature_mod", true);
@@ -679,6 +681,7 @@ namespace ACE.Server.Managers
                 ("rares_max_seconds_between", new Property<long>(5256000, "for rares_real_time: the maximum number of seconds a player can go before a second chance at a rare is allowed on rare eligible creature kills that did not generate a rare")),
                 ("summoning_killtask_multicredit_cap", new Property<long>(2, "if allow_summoning_killtask_multicredit is enabled, the maximum # of killtask credits a player can receive from 1 kill")),
                 ("teleport_visibility_fix", new Property<long>(0, "Fixes some possible issues with invisible players and mobs. 0 = default / disabled, 1 = players only, 2 = creatures, 3 = all world objects")),
+                ("spell_duration", new Property<long>(0, "Increase spell duration similar to augmentation 1 = 20%")),
                 ("max_level", new Property<long>(275, "Set the max character level."))
                 );
 

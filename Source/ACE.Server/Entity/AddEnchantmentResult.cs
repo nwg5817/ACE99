@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using ACE.Entity.Models;
+using ACE.Server.Managers;
 using ACE.Server.WorldObjects;
 using ACE.Server.WorldObjects.Managers;
 
@@ -97,6 +98,11 @@ namespace ACE.Server.Entity
 
                         if (!equip && caster is Player player && player.AugmentationIncreasedSpellDuration > 0)
                             spellDuration *= 1.0f + player.AugmentationIncreasedSpellDuration * 0.2f;
+
+                        uint spellDurationLevel = (uint)PropertyManager.GetLong("spell_duration").Item;
+
+                        if (spellDurationLevel > 0)
+                            spellDuration *= 1.0f + spellDurationLevel * 0.2f;
 
                         var entryDuration = entry.Duration == -1 ? double.PositiveInfinity : entry.Duration;
 
