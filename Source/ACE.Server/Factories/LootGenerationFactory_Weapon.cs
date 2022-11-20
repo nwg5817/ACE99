@@ -53,7 +53,7 @@ namespace ACE.Server.Factories
             {
                 float amount;
                 if (wo.IsCaster)
-                    amount = 0.5f;
+                    amount = 1.5f;
                 else
                     amount = 2.0f;
 

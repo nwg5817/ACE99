@@ -197,29 +197,12 @@ namespace ACE.Server.WorldObjects
 
                 float totalXP;
 
-                string xpMessage = "";
-
-                if (Common.ConfigManager.Config.Server.WorldRuleset != Common.Ruleset.CustomDM)
-                    totalXP = (XpOverride ?? 0) * damagePercent;
-                else
-                {
-                    float typeCampBonus;
-                    float areaCampBonus;
-                    float restCampBonus;
-
+                if (Common.ConfigManager.Config.Server.WorldRuleset == Common.Ruleset.CustomDM)
                     totalXP = GetCreatureDeathXP(Level ?? 0, (int)Health.MaxValue, Biota.PropertiesSpellBook?.Count ?? 0) * damagePercent;
-                    playerDamager.CampManager.HandleCampInteraction((uint)CreatureType, CurrentLandblock, out typeCampBonus, out areaCampBonus, out restCampBonus);
+                else
+                    totalXP = (XpOverride ?? 0) * damagePercent;
 
-                    float thirdXP = totalXP / 3.0f;
-                    totalXP = (thirdXP * typeCampBonus) + (thirdXP * areaCampBonus) + (thirdXP * restCampBonus);
-
-                    if (!CurrentLandblock.IsDungeon)
-                        totalXP *= 1.25f; // Surface provides 25% xp bonus to account for lower creature density.
-
-                    xpMessage = $"T: {(typeCampBonus * 100).ToString("0")}% A: {(areaCampBonus * 100).ToString("0")}% R: {(restCampBonus * 100).ToString("0")}%";
-                }
-
-                playerDamager.EarnXP((long)Math.Round(totalXP), XpType.Kill, Level, ShareType.All, xpMessage);
+                playerDamager.EarnXP((long)Math.Round(totalXP), XpType.Kill, Level, (uint)CreatureType, ShareType.All);
 
                 // handle luminance
                 if (LuminanceAward != null)

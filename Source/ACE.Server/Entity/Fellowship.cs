@@ -516,7 +516,7 @@ namespace ACE.Server.Entity
                 {
                     var fellowXpType = player == member ? XpType.Quest : XpType.Fellowship;
 
-                    member.GrantXP(perAmount, fellowXpType, shareType);
+                    member.GrantXP(perAmount, fellowXpType, shareType, player == member ? xpMessage : "");
                 }
             }
 

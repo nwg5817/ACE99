@@ -20,10 +20,11 @@ namespace ACE.Server.WorldObjects
         /// <param name="amount">The amount of XP being added</param>
         /// <param name="xpType">The source of XP being added</param>
         /// <param name="shareable">True if this XP can be shared with Fellowship</param>
-        public void EarnXP(long amount, XpType xpType, int? xpSourceLevel, ShareType shareType = ShareType.All, string xpMessage = "")
+        public void EarnXP(long amount, XpType xpType, int? xpSourceLevel, uint? xpSourceId, ShareType shareType = ShareType.All)
         {
             //Console.WriteLine($"{Name}.EarnXP({amount}, {sharable}, {fixedAmount})");
 
+            string xpMessage = "";
             bool usesRewardByLevelSystem = false;
             int formulaVersion = 0;
             if (xpType == XpType.Quest && amount < 0 && amount > -6000) // this range is used to specify the reward by level system.
@@ -71,18 +72,45 @@ namespace ACE.Server.WorldObjects
 
                 float totalXP = Creature.GetCreatureDeathXP(xpSourceLevel.Value, 0, 0, formulaVersion);
 
-                float typeCampBonus;
-                CampManager.HandleCampInteraction((uint)amount, CurrentLandblock, out typeCampBonus, out _, out _);
+                if (xpSourceId != null && xpSourceId != 0)
+                {
+                    float typeCampBonus;
+                    CampManager.HandleCampInteraction(xpSourceId.Value ^ 0xFFFF0000, null, out typeCampBonus, out _, out _);
 
-                totalXP = totalXP * typeCampBonus;
+                    totalXP = totalXP * typeCampBonus;
+
+                    xpMessage = $"T: {(typeCampBonus * 100).ToString("0")}%";
+                }
 
                 amount = (long)Math.Round(totalXP);
-                xpMessage = $"T: {(typeCampBonus * 100).ToString("0")}%";
             }
             else if (amount < 0)
             {
                 SpendXP(-amount);
                 return;
+            }
+            else if (xpType == XpType.Kill && Common.ConfigManager.Config.Server.WorldRuleset == Common.Ruleset.CustomDM)
+            {
+                float typeCampBonus;
+                float areaCampBonus;
+                float restCampBonus;
+
+                float totalXP = amount;
+
+                if (xpSourceId != null && xpSourceId != 0)
+                {
+                    CampManager.HandleCampInteraction(xpSourceId.Value, CurrentLandblock, out typeCampBonus, out areaCampBonus, out restCampBonus);
+
+                    float thirdXP = totalXP / 3.0f;
+                    totalXP = (thirdXP * typeCampBonus) + (thirdXP * areaCampBonus) + (thirdXP * restCampBonus);
+
+                    xpMessage = $"T: {(typeCampBonus * 100).ToString("0")}% A: {(areaCampBonus * 100).ToString("0")}% R: {(restCampBonus * 100).ToString("0")}%";
+                }
+
+                if (CurrentLandblock != null && !CurrentLandblock.IsDungeon)
+                    totalXP *= 1.25f; // Surface provides 25% xp bonus to account for lower creature density.
+
+                amount = (long)Math.Round(totalXP);
             }
 
             // apply xp modifier
@@ -612,7 +640,7 @@ namespace ACE.Server.WorldObjects
                 scaledXP = Math.Max(scaledXP, min);
 
             // apply xp modifiers?
-            EarnXP(scaledXP, XpType.Quest, Level, ShareType.Allegiance);
+            EarnXP(scaledXP, XpType.Quest, Level, null, ShareType.Allegiance);
         }
 
         /// <summary>
