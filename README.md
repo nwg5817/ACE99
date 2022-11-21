@@ -10,7 +10,7 @@
 - Asheron's Call was a registered trademark of Turbine, Inc. and WB Games Inc which has since expired.
 - ACEmulator and ClassicACE are not associated or affiliated in any way with Turbine, Inc. or WB Games Inc.
 
--A little more info-
+## A little more info
 Just a one-man army doing the impossible. The goal is to return AC as much as possible to its '99 state. In the process I will be attempting removal one patch at a time starting with Infiltrator. If the project gets far enough along, hopefully others will join in. 90% of this goal involves content removal/replacement. Future patches removed, replace monsters with comparable retail mobs, remove NPC's, portals, items, weenie by weenie, landblock by landblock. Not every single piece of content needs to be removed entirely, removing a quest may require only remove an NPC here or a portal there.
 
 Version control is important, I'm going to attempt to preserve patches through removing entirely in one fell swoop. To roll a new patch, we'll just be rolling back version control for weenies/landblocks. Server side shouldn't change that much.
