@@ -1,6 +1,6 @@
 Crossbow Mutation #1:
 
-Tier chances: 1, 0, 0, 0, 0, 0
+Tier chances: 1, 1, 1, 1, 1, 1
 
     - Chance 10%:
         DamageMod = 1.8
@@ -22,7 +22,7 @@ Tier chances: 1, 0, 0, 0, 0, 0
 
 Crossbow Mutation #2:
 
-Tier chances: 0, 1, 0, 0, 0, 0
+Tier chances: 0, 0, 0, 0, 0, 0
 
     - Chance 5%:
         DamageMod = 1.8
@@ -68,7 +68,7 @@ Tier chances: 0, 1, 0, 0, 0, 0
 
 Crossbow Mutation #3:
 
-Tier chances: 0, 0, 1, 0, 0, 0
+Tier chances: 0, 0, 0, 0, 0, 0
 
     - Chance 10%:
         DamageMod = 2.33
@@ -108,7 +108,7 @@ Tier chances: 0, 0, 1, 0, 0, 0
 
 Crossbow Mutation #4:
 
-Tier chances: 0, 0, 0, 1, 0, 0
+Tier chances: 0, 0, 0, 0, 0, 0
 
     - Chance 38%:
         DamageMod = 2.43
@@ -148,7 +148,7 @@ Tier chances: 0, 0, 0, 1, 0, 0
 
 Crossbow Mutation #5:
 
-Tier chances: 0, 0, 0, 0, 1, 1
+Tier chances: 0, 0, 0, 0, 0, 0
 
     - Chance 15%:
         DamageMod = 2.47

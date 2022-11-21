@@ -1,6 +1,6 @@
 Mace Mutation #1:
 
-Tier chances: 1, 0, 0, 0, 0, 0
+Tier chances: 1, 1, 1, 1, 1, 1
 
     - Chance 3%:
         Damage += 0
@@ -31,7 +31,7 @@ Tier chances: 1, 0, 0, 0, 0, 0
 
 Mace Mutation #2:
 
-Tier chances: 0, 1, 0, 0, 0, 0
+Tier chances: 0, 0, 0, 0, 0, 0
 
     - Chance 2%:
         Damage += 0
@@ -110,7 +110,7 @@ Tier chances: 0, 1, 0, 0, 0, 0
 
 Mace Mutation #3:
 
-Tier chances: 0, 0, 1, 0, 0, 0
+Tier chances: 0, 0, 0, 0, 0, 0
 
     - Chance 2%:
         Damage += 9
@@ -186,7 +186,7 @@ Tier chances: 0, 0, 1, 0, 0, 0
 
 Mace Mutation #4:
 
-Tier chances: 0, 0, 0, 1, 0, 0
+Tier chances: 0, 0, 0, 0, 0, 0
 
     - Chance 10%:
         Damage += 17
@@ -238,7 +238,7 @@ Tier chances: 0, 0, 0, 1, 0, 0
 
 Mace Mutation #5:
 
-Tier chances: 0, 0, 0, 0, 1, 0
+Tier chances: 0, 0, 0, 0, 0, 0
 
     - Chance 10%:
         Damage += 21
@@ -278,7 +278,7 @@ Tier chances: 0, 0, 0, 0, 1, 0
 
 Mace Mutation #6:
 
-Tier chances: 0, 0, 0, 0, 0, 1
+Tier chances: 0, 0, 0, 0, 0, 0
 
     - Chance 35%:
         Damage += 25

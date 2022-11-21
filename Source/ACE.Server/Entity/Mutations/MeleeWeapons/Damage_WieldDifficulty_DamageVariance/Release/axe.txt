@@ -1,6 +1,6 @@
 Axe Mutation #1:
 
-Tier chances: 1, 0, 0, 0, 0, 0
+Tier chances: 1, 1, 1, 1, 1, 1
 
     - Chance 3%:
         Damage += 0
@@ -31,7 +31,7 @@ Tier chances: 1, 0, 0, 0, 0, 0
 
 Axe Mutation #2:
 
-Tier chances: 0, 1, 0, 0, 0, 0
+Tier chances: 0, 0, 0, 0, 0, 0
 
     - Chance 2%:
         Damage += 0
@@ -116,7 +116,7 @@ Tier chances: 0, 1, 0, 0, 0, 0
 
 Axe Mutation #3:
 
-Tier chances: 0, 0, 1, 0, 0, 0
+Tier chances: 0, 0, 0, 0, 0, 0
 
     - Chance 2%:
         Damage += 9
@@ -198,7 +198,7 @@ Tier chances: 0, 0, 1, 0, 0, 0
 
 Axe Mutation #4:
 
-Tier chances: 0, 0, 0, 1, 0, 0
+Tier chances: 0, 0, 0, 0, 0, 0
 
     - Chance 10%:
         Damage += 18
@@ -250,7 +250,7 @@ Tier chances: 0, 0, 0, 1, 0, 0
 
 Axe Mutation #5:
 
-Tier chances: 0, 0, 0, 0, 1, 0
+Tier chances: 0, 0, 0, 0, 0, 0
 
     - Chance 10%:
         Damage += 22
@@ -290,7 +290,7 @@ Tier chances: 0, 0, 0, 0, 1, 0
 
 Axe Mutation #6:
 
-Tier chances: 0, 0, 0, 0, 0, 1
+Tier chances: 0, 0, 0, 0, 0, 0
 
     - Chance 35%:
         Damage += 26

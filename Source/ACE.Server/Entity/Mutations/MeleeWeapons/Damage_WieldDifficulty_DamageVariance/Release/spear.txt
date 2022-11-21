@@ -1,6 +1,6 @@
 Spear Mutation #1:
 
-Tier chances: 1, 0, 0, 0, 0, 0
+Tier chances: 1, 1, 1, 1, 1, 1
 
     - Chance 5%:
         Damage += 0
@@ -28,7 +28,7 @@ Tier chances: 1, 0, 0, 0, 0, 0
 
 Spear Mutation #2:
 
-Tier chances: 0, 1, 0, 0, 0, 0
+Tier chances: 0, 0, 0, 0, 0, 0
 
     - Chance 2%:
         Damage += 0
@@ -98,7 +98,7 @@ Tier chances: 0, 1, 0, 0, 0, 0
 
 Spear Mutation #3:
 
-Tier chances: 0, 0, 1, 0, 0, 0
+Tier chances: 0, 0, 0, 0, 0, 0
 
     - Chance 3%:
         Damage += 8
@@ -156,7 +156,7 @@ Tier chances: 0, 0, 1, 0, 0, 0
 
 Spear Mutation #4:
 
-Tier chances: 0, 0, 0, 1, 0, 0
+Tier chances: 0, 0, 0, 0, 0, 0
 
     - Chance 38%:
         Damage += 15
@@ -184,7 +184,7 @@ Tier chances: 0, 0, 0, 1, 0, 0
 
 Spear Mutation #5:
 
-Tier chances: 0, 0, 0, 0, 1, 0
+Tier chances: 0, 0, 0, 0, 0, 0
 
     - Chance 35%:
         Damage += 17
@@ -224,7 +224,7 @@ Tier chances: 0, 0, 0, 0, 1, 0
 
 Spear Mutation #6:
 
-Tier chances: 0, 0, 0, 0, 0, 1
+Tier chances: 0, 0, 0, 0, 0, 0
 
     - Chance 10%:
         Damage += 19

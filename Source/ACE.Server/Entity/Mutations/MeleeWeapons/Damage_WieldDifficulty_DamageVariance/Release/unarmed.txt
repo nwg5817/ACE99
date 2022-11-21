@@ -1,6 +1,6 @@
 Unarmed Mutation #1:
 
-Tier chances: 1, 0, 0, 0, 0, 0
+Tier chances: 1, 1, 1, 1, 1, 1
 
     - Chance 10%:
         Damage += 0
@@ -19,7 +19,7 @@ Tier chances: 1, 0, 0, 0, 0, 0
 
 Unarmed Mutation #2:
 
-Tier chances: 0, 1, 0, 0, 0, 0
+Tier chances: 0, 0, 0, 0, 0, 0
 
     - Chance 5%:
         Damage += 0
@@ -56,7 +56,7 @@ Tier chances: 0, 1, 0, 0, 0, 0
 
 Unarmed Mutation #3:
 
-Tier chances: 0, 0, 1, 0, 0, 0
+Tier chances: 0, 0, 0, 0, 0, 0
 
     - Chance 15%:
         Damage += 5
@@ -90,7 +90,7 @@ Tier chances: 0, 0, 1, 0, 0, 0
 
 Unarmed Mutation #4:
 
-Tier chances: 0, 0, 0, 1, 0, 0
+Tier chances: 0, 0, 0, 0, 0, 0
 
     - Chance 38%:
         Damage += 8
@@ -124,7 +124,7 @@ Tier chances: 0, 0, 0, 1, 0, 0
 
 Unarmed Mutation #5:
 
-Tier chances: 0, 0, 0, 0, 1, 0
+Tier chances: 0, 0, 0, 0, 0, 0
 
     - Chance 15%:
         Damage += 10
@@ -170,7 +170,7 @@ Tier chances: 0, 0, 0, 0, 1, 0
 
 Unarmed Mutation #6:
 
-Tier chances: 0, 0, 0, 0, 0, 1
+Tier chances: 0, 0, 0, 0, 0, 0
 
     - Chance 10%:
         Damage += 13

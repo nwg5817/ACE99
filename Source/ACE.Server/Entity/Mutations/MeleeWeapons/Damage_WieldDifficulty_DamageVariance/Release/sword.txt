@@ -1,6 +1,6 @@
 Sword Mutation #1:
 
-Tier chances: 1, 0, 0, 0, 0, 0
+Tier chances: 1, 1, 1, 1, 1, 1
 
     - Chance 3%:
         Damage += 0
@@ -37,7 +37,7 @@ Tier chances: 1, 0, 0, 0, 0, 0
 
 Sword Mutation #2:
 
-Tier chances: 0, 1, 0, 0, 0, 0
+Tier chances: 0, 0, 0, 0, 0, 0
 
     - Chance 1%:
         Damage += 0
@@ -134,7 +134,7 @@ Tier chances: 0, 1, 0, 0, 0, 0
 
 Sword Mutation #3:
 
-Tier chances: 0, 0, 1, 0, 0, 0
+Tier chances: 0, 0, 0, 0, 0, 0
 
     - Chance 2%:
         Damage += 11
@@ -228,7 +228,7 @@ Tier chances: 0, 0, 1, 0, 0, 0
 
 Sword Mutation #4:
 
-Tier chances: 0, 0, 0, 1, 0, 0
+Tier chances: 0, 0, 0, 0, 0, 0
 
     - Chance 5%:
         Damage += 21
@@ -292,7 +292,7 @@ Tier chances: 0, 0, 0, 1, 0, 0
 
 Sword Mutation #5:
 
-Tier chances: 0, 0, 0, 0, 1, 0
+Tier chances: 0, 0, 0, 0, 0, 0
 
     - Chance 5%:
         Damage += 26
@@ -356,7 +356,7 @@ Tier chances: 0, 0, 0, 0, 1, 0
 
 Sword Mutation #6:
 
-Tier chances: 0, 0, 0, 0, 0, 1
+Tier chances: 0, 0, 0, 0, 0, 0
 
     - Chance 5%:
         Damage += 31

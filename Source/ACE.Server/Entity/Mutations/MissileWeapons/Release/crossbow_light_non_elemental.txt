@@ -1,6 +1,6 @@
 Light Crossbow Mutation #1:
 
-Tier chances: 1, 0, 0, 0, 0, 0
+Tier chances: 1, 1, 1, 1, 1, 1
 
     - Chance 10%:
         DamageMod = 1.5
@@ -22,7 +22,7 @@ Tier chances: 1, 0, 0, 0, 0, 0
 
 Light Crossbow Mutation #2:
 
-Tier chances: 0, 1, 0, 0, 0, 0
+Tier chances: 0, 0, 0, 0, 0, 0
 
     - Chance 5%:
         DamageMod = 1.5
@@ -68,7 +68,7 @@ Tier chances: 0, 1, 0, 0, 0, 0
 
 Light Crossbow Mutation #3:
 
-Tier chances: 0, 0, 1, 0, 0, 0
+Tier chances: 0, 0, 0, 0, 0, 0
 
     - Chance 10%:
         DamageMod = 2.03
@@ -120,7 +120,7 @@ Tier chances: 0, 0, 1, 0, 0, 0
 
 Light Crossbow Mutation #4:
 
-Tier chances: 0, 0, 0, 1, 0, 0
+Tier chances: 0, 0, 0, 0, 0, 0
 
     - Chance 10%:
         DamageMod = 2.13
@@ -172,7 +172,7 @@ Tier chances: 0, 0, 0, 1, 0, 0
 
 Light Crossbow Mutation #5:
 
-Tier chances: 0, 0, 0, 0, 1, 1
+Tier chances: 0, 0, 0, 0, 0, 0
 
     - Chance 15%:
         DamageMod = 2.23
