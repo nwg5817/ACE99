@@ -2613,37 +2613,6 @@ namespace ACE.Server.Command.Handlers.Processors
                 ExportSQLWeenie(session, param, true);
         }
 
-        [CommandHandler("export-sql-landblocks", AccessLevel.Developer, CommandHandlerFlag.None, 1, "Exports weenie content from database to an SQL file in a WeenieType/ItemType folder structure", "<wcid>")]
-        public static void HandleExportSqlLandblocks(Session session, params string[] parameters)
-        {
-            var param = parameters[0];
-
-            WeenieType weenieType = WeenieType.Undef;
-            if (param == "all" || Enum.TryParse(param, true, out weenieType))
-            {
-                var WeenieTypes = DatabaseManager.World.GetAllWeenieLevels();
-                if (param == "all")
-                {
-                    foreach (var entry in WeenieTypes)
-                    {
-                        ExportSQLLandblock(session, entry.Key.ToString());
-                    }
-                }
-                else if (weenieType != WeenieType.Undef)
-                {
-                    foreach (var entry in WeenieTypes)
-                    {
-                        if (entry.Value == (int)weenieType)
-                        ExportSQLLandblock(session, entry.Key.ToString());
-                    }
-                }
-                else
-                    CommandHandlerHelper.WriteOutputInfo(session, $"Invalid parameter: '{parameters[0]}'");
-            }
-            else
-                ExportSQLWeenie(session, param, true);
-        }
-
         [CommandHandler("export-sql", AccessLevel.Developer, CommandHandlerFlag.None, 1, "Exports content from database to SQL file", "<wcid> [content-type]")]
         public static void HandleExportSql(Session session, params string[] parameters)
         {
