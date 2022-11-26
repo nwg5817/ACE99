@@ -70,6 +70,11 @@ namespace ACE.Server.WorldObjects
                     else
                     { // there are some houses that for some reason, don't have return locations, so we'll fake the entry with a reference to the root house portal location mimicking other database entries.
                         var rootHouse = House.RootHouse;
+                        if (rootHouse == null)
+                        {
+                            log.Warn($"[HOUSE] HousePortal.SetLinkProperties({(wo != null ? $"{wo.Name}:0x{wo.Guid}:{wo.WeenieClassId}" : "null")}): House.RootHouse is null for HousePortal 0x{Guid} at {Location.ToLOCString()}");
+                            return;
+                        }
                         i = new Database.Models.World.HousePortal { ObjCellId = rootHouse.HousePortal.Location.Cell,
                                                                       OriginX = rootHouse.HousePortal.Location.PositionX,
                                                                       OriginY = rootHouse.HousePortal.Location.PositionY,
