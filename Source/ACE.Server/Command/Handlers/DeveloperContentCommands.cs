@@ -2596,6 +2596,7 @@ namespace ACE.Server.Command.Handlers.Processors
                     foreach (var entry in WeenieTypes)
                     {
                         ExportSQLWeenie(session, entry.Key.ToString(), true);
+                        //ExportSQLRecipe(session, entry.Key.ToString());
                     }
                 }
                 else if(weenieType != WeenieType.Undef)
@@ -2604,6 +2605,7 @@ namespace ACE.Server.Command.Handlers.Processors
                     {
                         if(entry.Value == (int)weenieType)
                             ExportSQLWeenie(session, entry.Key.ToString(), true);
+                            //ExportSQLRecipe(session, entry.Key.ToString());
                     }
                 }
                 else
@@ -2618,6 +2620,7 @@ namespace ACE.Server.Command.Handlers.Processors
         {
             var param = parameters[0];
             var contentType = FileType.Weenie;
+            bool details = true;
 
             if (parameters.Length > 1)
             {
@@ -2632,7 +2635,7 @@ namespace ACE.Server.Command.Handlers.Processors
             switch (contentType)
             {
                 case FileType.LandblockInstance:
-                    ExportSQLLandblock(session, param);
+                    ExportSQLLandblock(session, param, false);
                     break;
 
                 case FileType.Quest:
@@ -2646,6 +2649,9 @@ namespace ACE.Server.Command.Handlers.Processors
                 case FileType.Weenie:
                     ExportSQLWeenie(session, param);
                     break;
+                case FileType.Spell:
+                    ExportSQLSpell(session, param);
+                    break;
             }
         }
 
@@ -2656,7 +2662,7 @@ namespace ACE.Server.Command.Handlers.Processors
             {
                 var instances = DatabaseManager.World.GetCachedInstancesByLandblock(landblockId);
                 if(instances != null && instances.Count > 0)
-                    ExportSQLLandblock(session, landblockId.ToString("x4"));
+                    ExportSQLLandblock(session, landblockId.ToString("x4"), true);
             }
         }
 
@@ -2750,6 +2756,76 @@ namespace ACE.Server.Command.Handlers.Processors
             CommandHandlerHelper.WriteOutputInfo(session, $"Exported {sql_folder}{sql_filename}");
         }
 
+        public static void ExportSQLSpell(Session session, string param)
+        {
+            DirectoryInfo di = VerifyContentFolder(session, false);
+
+            var sep = Path.DirectorySeparatorChar;
+
+            if (!uint.TryParse(param, out var recipeId))
+            {
+                CommandHandlerHelper.WriteOutputInfo(session, $"{param} not a valid recipe id");
+                return;
+            }
+
+            var cookbooks = DatabaseManager.World.GetCookbooksByRecipeId(recipeId);
+            if (cookbooks == null)
+            {
+                CommandHandlerHelper.WriteOutputInfo(session, $"Couldn't find recipe id {recipeId}");
+                return;
+            }
+
+            var sql_folder = $"{di.FullName}{sep}sql{sep}recipes{sep}";
+
+            di = new DirectoryInfo(sql_folder);
+
+            if (!di.Exists)
+                di.Create();
+
+            if (RecipeSQLWriter == null)
+            {
+                RecipeSQLWriter = new RecipeSQLWriter();
+                RecipeSQLWriter.WeenieNames = DatabaseManager.World.GetAllWeenieNames();
+            }
+
+            if (CookBookSQLWriter == null)
+            {
+                CookBookSQLWriter = new CookBookSQLWriter();
+                CookBookSQLWriter.WeenieNames = DatabaseManager.World.GetAllWeenieNames();
+            }
+
+            // same recipe for all cookbooks
+            var recipe = cookbooks[0].Recipe;
+
+            var sql_filename = RecipeSQLWriter.GetDefaultFileName(recipe, cookbooks);
+
+            try
+            {
+                var sqlFile = new StreamWriter(sql_folder + sql_filename);
+
+                RecipeSQLWriter.CreateSQLDELETEStatement(recipe, sqlFile);
+                sqlFile.WriteLine();
+
+                RecipeSQLWriter.CreateSQLINSERTStatement(recipe, sqlFile);
+                sqlFile.WriteLine();
+
+                CookBookSQLWriter.CreateSQLDELETEStatement(cookbooks, sqlFile);
+                sqlFile.WriteLine();
+
+                CookBookSQLWriter.CreateSQLINSERTStatement(cookbooks, sqlFile);
+
+                sqlFile.Close();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                CommandHandlerHelper.WriteOutputInfo(session, $"Failed to export {sql_folder}{sql_filename}");
+                return;
+            }
+
+            CommandHandlerHelper.WriteOutputInfo(session, $"Exported {sql_folder}{sql_filename}");
+        }
+
         public static void ExportSQLRecipe(Session session, string param)
         {
             DirectoryInfo di = VerifyContentFolder(session, false);
@@ -2820,7 +2896,74 @@ namespace ACE.Server.Command.Handlers.Processors
             CommandHandlerHelper.WriteOutputInfo(session, $"Exported {sql_folder}{sql_filename}");
         }
 
-        public static void ExportSQLLandblock(Session session, string param)
+        public static void ExportSQLLandblock(Session session, string param, bool clean)
+        {
+            DirectoryInfo di = VerifyContentFolder(session, false);
+
+            var sep = Path.DirectorySeparatorChar;
+
+            if (!ushort.TryParse(Regex.Match(param, @"[0-9A-F]{4}", RegexOptions.IgnoreCase).Value, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out var landblockId))
+            {
+                CommandHandlerHelper.WriteOutputInfo(session, $"{param} not a valid landblock");
+                return;
+            }
+
+            var instances = DatabaseManager.World.GetCachedInstancesByLandblock(landblockId);
+            if (instances == null)
+            {
+                CommandHandlerHelper.WriteOutputInfo(session, $"Couldn't find landblock {landblockId:X4}");
+                return;
+            }
+
+            var sql_folder = $"{di.FullName}{sep}sql{sep}landblocks{sep}";
+
+            di = new DirectoryInfo(sql_folder);
+
+            if (!di.Exists)
+                di.Create();
+
+            var sql_filename = LandblockInstanceWriter.GetDefaultFileName(landblockId);
+
+            try
+            {
+                if (LandblockInstanceWriter == null)
+                {
+                    LandblockInstanceWriter = new LandblockInstanceWriter();
+                    LandblockInstanceWriter.WeenieNames = DatabaseManager.World.GetAllWeenieNames();
+                    LandblockInstanceWriter.WeenieClassNames = DatabaseManager.World.GetAllWeenieClassNames();
+                    LandblockInstanceWriter.WeenieLevels = DatabaseManager.World.GetAllWeenieLevels();
+                    LandblockInstanceWriter.WeenieTypes = DatabaseManager.World.GetAllWeenieTypes();
+                    LandblockInstanceWriter.TreasureDeath = DatabaseManager.World.GetAllTreasureDeath();
+                    LandblockInstanceWriter.TreasureWielded = DatabaseManager.World.GetAllTreasureWielded();
+                }
+
+                var sqlFile = new StreamWriter(sql_folder + sql_filename);
+                if (!clean)
+                { 
+                LandblockInstanceWriter.CreateSQLDELETEStatement(instances, sqlFile);
+                sqlFile.WriteLine();
+                LandblockInstanceWriter.CreateSQLINSERTStatement(instances, sqlFile);
+                }
+                else
+                {
+                    LandblockInstanceWriter.CreateSQLDELETEStatement(instances, sqlFile);
+                    sqlFile.WriteLine();
+
+                    LandblockInstanceWriter.CreateSQLINSERTStatementClean(instances, sqlFile);
+                }
+                sqlFile.Close();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                CommandHandlerHelper.WriteOutputInfo(session, $"Failed to export {sql_folder}{sql_filename}");
+                return;
+            }
+
+            CommandHandlerHelper.WriteOutputInfo(session, $"Exported {sql_folder}{sql_filename}");
+        }
+
+        public static void ExportSQLLandblockAlt(Session session, string param)
         {
             DirectoryInfo di = VerifyContentFolder(session, false);
 

@@ -828,8 +828,8 @@ namespace ACE.Database.SQLFormatters.World
                         $"{TrimNegativeZero(input[i].AnglesW):0.######}, " +
                         $"{TrimNegativeZero(input[i].AnglesX):0.######}, " +
                         $"{TrimNegativeZero(input[i].AnglesY):0.######}, " +
-                        $"{TrimNegativeZero(input[i].AnglesZ):0.######})" +
-                        $" /* Generate {label} (x{input[i].InitCreate:N0} up to max of {input[i].MaxCreate:N0}) - Regenerate upon {Enum.GetName(typeof(RegenerationType), input[i].WhenCreate)} - Location to (re)Generate: {Enum.GetName(typeof(RegenLocationType), input[i].WhereCreate)} */";
+                        $"{TrimNegativeZero(input[i].AnglesZ):0.######})";// +
+                        //$" /* Generate {label} (x{input[i].InitCreate:N0} up to max of {input[i].MaxCreate:N0}) - Regenerate upon {Enum.GetName(typeof(RegenerationType), input[i].WhenCreate)} - Location to (re)Generate: {Enum.GetName(typeof(RegenLocationType), input[i].WhereCreate)} */";
             });
             ValuesWriter(input.Count, lineGenerator, writer);
         }
