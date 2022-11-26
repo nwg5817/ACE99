@@ -170,6 +170,8 @@ namespace ACE.Server.WorldObjects
         {
             if (IsNPC)
                 GenerateNewFace(); // Now that we have our location we can generate our pseudo-random appearance.
+
+            UpdateDefenseCapBonus();
         }
 
         // verify logic

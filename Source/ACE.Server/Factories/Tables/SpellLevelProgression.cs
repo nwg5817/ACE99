@@ -7664,6 +7664,50 @@ namespace ACE.Server.Factories.Tables
             SpellId.GauntletVitalityIII,
         };
 
+        public static readonly List<SpellId> ArmorMasterySelf = new List<SpellId>()
+        {
+            SpellId.ArmorMasterySelf1,
+            SpellId.ArmorMasterySelf2,
+            SpellId.ArmorMasterySelf3,
+            SpellId.ArmorMasterySelf4,
+            SpellId.ArmorMasterySelf5,
+            SpellId.ArmorMasterySelf6,
+            SpellId.ArmorMasterySelf7,
+            SpellId.ArmorMasterySelf8,
+        };
+
+        public static readonly List<SpellId> ArmorMasteryOther = new List<SpellId>()
+        {
+            SpellId.ArmorMasteryOther1,
+            SpellId.ArmorMasteryOther2,
+            SpellId.ArmorMasteryOther3,
+            SpellId.ArmorMasteryOther4,
+            SpellId.ArmorMasteryOther5,
+            SpellId.ArmorMasteryOther6,
+            SpellId.ArmorMasteryOther7,
+            SpellId.ArmorMasteryOther8,
+        };
+
+        public static readonly List<SpellId> ArmorIneptitudeOther = new List<SpellId>()
+        {
+            SpellId.ArmorIneptitudeOther1,
+            SpellId.ArmorIneptitudeOther2,
+            SpellId.ArmorIneptitudeOther3,
+            SpellId.ArmorIneptitudeOther4,
+            SpellId.ArmorIneptitudeOther5,
+            SpellId.ArmorIneptitudeOther6,
+            SpellId.ArmorIneptitudeOther7,
+            SpellId.ArmorIneptitudeOther8,
+        };
+
+        public static readonly List<SpellId> CantripArmorAptitude = new List<SpellId>()
+        {
+            SpellId.CantripArmorAptitude1,
+            SpellId.CantripArmorAptitude2,
+            SpellId.CantripArmorAptitude3,
+            SpellId.CantripArmorAptitude4,
+        };
+
         static SpellLevelProgression()
         {
             // takes ~5ms
@@ -8409,6 +8453,11 @@ namespace ACE.Server.Factories.Tables
             AddSpells(GauntletCriticalDamageReduction);
             AddSpells(GauntletHealingBoost);
             AddSpells(GauntletVitality);
+            //CustomDM
+            AddSpells(ArmorMasterySelf);
+            AddSpells(ArmorMasteryOther);
+            AddSpells(ArmorIneptitudeOther);
+            AddSpells(CantripArmorAptitude);
         }
 
         private static void AddSpells(List<SpellId> spells)

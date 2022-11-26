@@ -188,13 +188,13 @@ namespace ACE.Server.Factories.Tables
 
                     ( SpellId.CANTRIPLIGHTWEAPONSAPTITUDE1,        1.0f ), // CANTRIPAXEAPTITUDE1
                     ( SpellId.CANTRIPFINESSEWEAPONSAPTITUDE1,      1.0f ), // CANTRIPDAGGERAPTITUDE1
-                    ( SpellId.CANTRIPMACEAPTITUDE1,                1.0f ),
+                    //( SpellId.CANTRIPMACEAPTITUDE1,                1.0f ),
                     ( SpellId.CANTRIPSPEARAPTITUDE1,               1.0f ),
-                    ( SpellId.CANTRIPSTAFFAPTITUDE1,               1.0f ),
+                    //( SpellId.CANTRIPSTAFFAPTITUDE1,               1.0f ),
                     ( SpellId.CANTRIPHEAVYWEAPONSAPTITUDE1,        1.0f ), // CANTRIPSWORDAPTITUDE1
                     ( SpellId.CANTRIPUNARMEDAPTITUDE1,             1.0f ),
                     ( SpellId.CANTRIPMISSILEWEAPONSAPTITUDE1,      1.0f ), // CANTRIPBOWAPTITUDE1
-                    ( SpellId.CANTRIPCROSSBOWAPTITUDE1,            1.0f ),
+                    //( SpellId.CANTRIPCROSSBOWAPTITUDE1,            1.0f ),
                     ( SpellId.CANTRIPTHROWNAPTITUDE1,              1.0f ),
 
                     ( SpellId.CANTRIPIMPREGNABILITY1,              1.0f ),
@@ -224,6 +224,7 @@ namespace ACE.Server.Factories.Tables
 
                     ( SpellId.CantripDualWieldAptitude1,           1.0f ),
                     ( SpellId.CantripShieldAptitude1,              1.0f ),
+                    ( SpellId.CantripArmorAptitude1,               1.0f ),
 
                     ( SpellId.CANTRIPALCHEMICALPROWESS1,           0.5f ),
                     ( SpellId.CANTRIPARCANEPROWESS1,               0.5f ),

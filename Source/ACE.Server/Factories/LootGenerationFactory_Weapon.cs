@@ -48,7 +48,7 @@ namespace ACE.Server.Factories
             if (Common.ConfigManager.Config.Server.WorldRuleset != Common.Ruleset.CustomDM)
                 return false;
 
-            var chance = ExtraWeaponEffects.GetCrushingBlowChanceForTier(treasureDeath.Tier);
+            var chance = ExtraMutationEffects.GetCrushingBlowChanceForTier(treasureDeath.Tier);
             if (chance > ThreadSafeRandom.Next(0.0f, 1.0f))
             {
                 float amount;
@@ -70,10 +70,15 @@ namespace ACE.Server.Factories
             if (Common.ConfigManager.Config.Server.WorldRuleset != Common.Ruleset.CustomDM)
                 return false;
 
-            var chance = ExtraWeaponEffects.GetBitingStrikeChanceForTier(treasureDeath.Tier);
+            var chance = ExtraMutationEffects.GetBitingStrikeChanceForTier(treasureDeath.Tier);
             if (chance > ThreadSafeRandom.Next(0.0f, 1.0f))
             {
-                wo.CriticalFrequency = 0.15f;
+                float amount;
+                if (wo.IsCaster)
+                    amount = 0.10f;
+                else
+                    amount = 0.15f;
+                wo.CriticalFrequency = amount;
                 wo.IconOverlayId = 0x06005EBD;
                 return true;
             }
@@ -102,11 +107,59 @@ namespace ACE.Server.Factories
             if (Common.ConfigManager.Config.Server.WorldRuleset != Common.Ruleset.CustomDM)
                 return false;
 
-            var chance = ExtraWeaponEffects.GetHollowChanceForTier(treasureDeath.Tier);
+            var chance = ExtraMutationEffects.GetHollowChanceForTier(treasureDeath.Tier);
             if (chance > ThreadSafeRandom.Next(0.0f, 1.0f))
             {
                 wo.IgnoreMagicArmor = true;
                 wo.IgnoreMagicResist = true;
+                wo.Translucency = 0.7f;
+                wo.Name = $"Hollow {wo.Name}";
+                wo.IconOverlayId = 0x06005EBE;
+                return true;
+            }
+            return false;
+        }
+
+        private static bool RollArmorCleaving(TreasureDeath treasureDeath, WorldObject wo)
+        {
+            if (Common.ConfigManager.Config.Server.WorldRuleset != Common.Ruleset.CustomDM)
+                return false;
+
+            var chance = ExtraMutationEffects.GetArmorCleavingChanceForTier(treasureDeath.Tier);
+            if (chance > ThreadSafeRandom.Next(0.0f, 1.0f))
+            {
+                wo.IgnoreArmor = 0.75f;
+                wo.IconOverlayId = 0x06005EBF;
+                return true;
+            }
+            return false;
+        }
+
+        private static bool RollShieldCleaving(TreasureDeath treasureDeath, WorldObject wo)
+        {
+            if (Common.ConfigManager.Config.Server.WorldRuleset != Common.Ruleset.CustomDM)
+                return false;
+
+            var chance = ExtraMutationEffects.GetShieldCleavingChanceForTier(treasureDeath.Tier);
+            if (chance > ThreadSafeRandom.Next(0.0f, 1.0f))
+            {
+                wo.IgnoreShield = 0.5f;
+                wo.IconOverlayId = 0x06005EC2;
+                wo.Name = $"{wo.Name} of Shield Cleaving";
+                return true;
+            }
+            return false;
+        }
+
+        private static bool RollAbsorbMagic(TreasureDeath treasureDeath, WorldObject wo)
+        {
+            if (Common.ConfigManager.Config.Server.WorldRuleset != Common.Ruleset.CustomDM)
+                return false;
+
+            var chance = ExtraMutationEffects.GetAbsorbMagicChanceForTier(treasureDeath.Tier);
+            if (chance > ThreadSafeRandom.Next(0.0f, 1.0f))
+            {
+                wo.AbsorbMagicDamage = 0.25f;
                 wo.Translucency = 0.7f;
                 wo.Name = $"Hollow {wo.Name}";
                 wo.IconOverlayId = 0x06005EBE;

@@ -285,25 +285,25 @@ namespace ACE.Server.Factories
                         tweakedDeathTreasure.MagicItemMaxAmount = 3;
                     tweakedDeathTreasure.MagicItemMaxAmount = (int)Math.Ceiling(tweakedDeathTreasure.MagicItemMaxAmount * 1.5);
 
-                    if (Common.ConfigManager.Config.Server.WorldRuleset == Common.Ruleset.CustomDM)
-                    {
-                        // Add some scrolls to chest loot.
-                        var treasureRoll = new TreasureRoll(TreasureItemType_Orig.Scroll);
-                        Container container = tweakedFor as Container;
-                        int numScrolls = 0;
-                        if (ThreadSafeRandom.Next(1, 10) > 8)
-                            numScrolls = 1;
-                        for (var i = 0; i < numScrolls; i++)
-                        {
-                            treasureRoll.Wcid = ScrollWcids.Roll();
-                            var scroll = CreateAndMutateWcid(tweakedDeathTreasure, treasureRoll, true);
-                            if (scroll != null)
-                            {
-                                if (!container.TryAddToInventory(scroll))
-                                    scroll.Destroy();
-                            }
-                        }
-                    }
+                    //if (Common.ConfigManager.Config.Server.WorldRuleset == Common.Ruleset.CustomDM)
+                    //{
+                    //    // Add some scrolls to chest loot.
+                    //    var treasureRoll = new TreasureRoll(TreasureItemType_Orig.Scroll);
+                    //    Container container = tweakedFor as Container;
+                    //    int numScrolls = 0;
+                    //    if (ThreadSafeRandom.Next(1, 10) > 8)
+                    //        numScrolls = 1;
+                    //    for (var i = 0; i < numScrolls; i++)
+                    //    {
+                    //        treasureRoll.Wcid = ScrollWcids.Roll();
+                    //        var scroll = CreateAndMutateWcid(tweakedDeathTreasure, treasureRoll, true);
+                    //        if (scroll != null)
+                    //        {
+                    //            if (!container.TryAddToInventory(scroll))
+                    //                scroll.Destroy();
+                    //        }
+                    //    }
+                    //}
 
                     return tweakedDeathTreasure;
                 }

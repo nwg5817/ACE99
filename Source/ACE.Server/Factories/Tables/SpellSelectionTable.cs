@@ -435,6 +435,7 @@ namespace ACE.Server.Factories.Tables
         {
             if (Common.ConfigManager.Config.Server.WorldRuleset == Common.Ruleset.CustomDM)
             {
+                // gems
                 spellSelectionGroup1 = new ChanceTable<SpellId>(ChanceTableType.Weight)
                 {
                     ( SpellId.StrengthOther1,               5.0f ),
@@ -469,13 +470,13 @@ namespace ACE.Server.Factories.Tables
 
                     ( SpellId.LightWeaponsMasteryOther1,    0.5f ), // AxeMasteryOther1
                     ( SpellId.FinesseWeaponsMasteryOther1,  0.5f ), // DaggerMasteryOther1
-                    ( SpellId.MaceMasteryOther1,            0.5f ),
+                    //( SpellId.MaceMasteryOther1,            0.5f ),
                     ( SpellId.SpearMasteryOther1,           0.5f ),
-                    ( SpellId.StaffMasteryOther1,           0.5f ),
+                    //( SpellId.StaffMasteryOther1,           0.5f ),
                     ( SpellId.HeavyWeaponsMasteryOther1,    0.5f ), // SwordMasteryOther1
                     ( SpellId.UnarmedCombatMasteryOther1,   0.5f ),
                     ( SpellId.MissileWeaponsMasteryOther1,  0.5f ), // BowMasteryOther1
-                    ( SpellId.CrossbowMasteryOther1,        0.5f ),
+                    //( SpellId.CrossbowMasteryOther1,        0.5f ),
                     ( SpellId.ThrownWeaponMasteryOther1,    0.5f ),
                     ( SpellId.ShieldMasteryOther1,          0.5f ),
                     ( SpellId.DualWieldMasteryOther1,       0.5f ),
@@ -514,6 +515,7 @@ namespace ACE.Server.Factories.Tables
                     ( SpellId.ArcanumSalvagingOther1,    1.0f ),
                     ( SpellId.MagicItemExpertiseOther1,  1.0f ),
                     ( SpellId.WeaponExpertiseOther1,     1.0f ),
+                    ( SpellId.ArmorMasteryOther1,        1.0f ),
                 };
 
                 // crowns
@@ -600,66 +602,67 @@ namespace ACE.Server.Factories.Tables
                 };
 
                 // gauntlets
-                spellSelectionGroup9 = new ChanceTable<SpellId>()
+                spellSelectionGroup9 = new ChanceTable<SpellId>(ChanceTableType.Weight)
                 {
-                    ( SpellId.CoordinationOther1,          0.13f ),
+                    ( SpellId.CoordinationOther1,          2.0f ),
 
-                    ( SpellId.HealingMasteryOther1,        0.10f ),
+                    ( SpellId.HealingMasteryOther1,        1.5f ),
 
-                    ( SpellId.LightWeaponsMasteryOther1,   0.07f ), // AxeMasteryOther1
-                    ( SpellId.FinesseWeaponsMasteryOther1, 0.07f ), // DaggerMasteryOther1
-                    ( SpellId.MaceMasteryOther1,           0.07f ),
-                    ( SpellId.SpearMasteryOther1,          0.07f ),
-                    ( SpellId.StaffMasteryOther1,          0.07f ),
-                    ( SpellId.HeavyWeaponsMasteryOther1,   0.07f ), // SwordMasteryOther1
-                    ( SpellId.UnarmedCombatMasteryOther1,  0.07f ),
-                    ( SpellId.MissileWeaponsMasteryOther1, 0.07f ), // BowMasteryOther1
-                    ( SpellId.CrossbowMasteryOther1,       0.07f ),
-                    ( SpellId.ThrownWeaponMasteryOther1,   0.07f ),
-                    ( SpellId.ShieldMasteryOther1,         0.07f ),
+                    ( SpellId.LightWeaponsMasteryOther1,      1.0f ), // AxeMasteryOther1
+                    ( SpellId.FinesseWeaponsMasteryOther1,    1.0f ), // DaggerMasteryOther1
+                    //( SpellId.MaceMasteryOther1,              1.0f ),
+                    ( SpellId.SpearMasteryOther1,             1.0f ),
+                    //( SpellId.StaffMasteryOther1,             1.0f ),
+                    ( SpellId.HeavyWeaponsMasteryOther1,      1.0f ), // SwordMasteryOther1
+                    ( SpellId.UnarmedCombatMasteryOther1,     1.0f ),
+                    ( SpellId.MissileWeaponsMasteryOther1,    1.0f ), // BowMasteryOther1
+                    //( SpellId.CrossbowMasteryOther1,          1.0f ),
+                    ( SpellId.ThrownWeaponMasteryOther1,      1.0f ),
+                    ( SpellId.ShieldMasteryOther1,            1.0f ),
                 };
 
                 // helms, basinets, helmets, coifs, cowls, heaumes, kabutons
-                spellSelectionGroup10 = new ChanceTable<SpellId>()
+                spellSelectionGroup10 = new ChanceTable<SpellId>(ChanceTableType.Weight)
                 {
-                    ( SpellId.MagicResistanceOther1,      0.16f ),
-                    ( SpellId.ImpregnabilityOther1,       0.12f ),
-                    ( SpellId.InvulnerabilityOther1,      0.12f ),
+                    ( SpellId.MagicResistanceOther1,         2.5f ),
+                    ( SpellId.ImpregnabilityOther1,          2.0f ),
+                    ( SpellId.InvulnerabilityOther1,         2.0f ),
 
-                    ( SpellId.ArmorExpertiseOther1,       0.06f ),
-                    ( SpellId.ItemExpertiseOther1,        0.06f ),
-                    ( SpellId.WeaponExpertiseOther1,      0.06f ),
-                    ( SpellId.MonsterAttunementOther1,    0.06f ),
-                    ( SpellId.HealingMasteryOther1,       0.06f ),
-                    ( SpellId.RegenerationOther1,         0.06f ),
-                    ( SpellId.RejuvenationOther1,         0.06f ),
-                    ( SpellId.ManaRenewalOther1,          0.06f ),
-                    ( SpellId.FealtyOther1,               0.06f ),
+                    ( SpellId.ArmorExpertiseOther1,          1.0f ),
+                    ( SpellId.ItemExpertiseOther1,           1.0f ),
+                    ( SpellId.WeaponExpertiseOther1,         1.0f ),
+                    ( SpellId.MonsterAttunementOther1,       1.0f ),
+                    ( SpellId.HealingMasteryOther1,          1.0f ),
+                    ( SpellId.RegenerationOther1,            1.0f ),
+                    ( SpellId.RejuvenationOther1,            1.0f ),
+                    ( SpellId.ManaRenewalOther1,             1.0f ),
+                    ( SpellId.FealtyOther1,                  1.0f ),
 
-                    ( SpellId.DualWieldMasteryOther1,     0.06f ),
+                    ( SpellId.DualWieldMasteryOther1,        1.0f ),
+                    ( SpellId.ArmorMasteryOther1,            1.0f ),
                 };
 
                 // boots, chiran sandals, sollerets
-                spellSelectionGroup11 = new ChanceTable<SpellId>()
+                spellSelectionGroup11 = new ChanceTable<SpellId>(ChanceTableType.Weight)
                 {
-                    ( SpellId.QuicknessOther1,             0.20f ),
-                    ( SpellId.CoordinationOther1,          0.10f ),
+                    ( SpellId.QuicknessOther1,             8.0f ),
+                    ( SpellId.CoordinationOther1,          4.0f ),
 
-                    ( SpellId.HealingMasteryOther1,        0.10f ),
+                    ( SpellId.HealingMasteryOther1,        4.0f ),
 
-                    ( SpellId.JumpingMasteryOther1,        0.05f ),
-                    ( SpellId.SprintOther1,                0.05f ),
+                    ( SpellId.JumpingMasteryOther1,        2.0f ),
+                    ( SpellId.SprintOther1,                2.0f ),
 
-                    ( SpellId.LightWeaponsMasteryOther1,   0.05f ), // AxeMasteryOther1
-                    ( SpellId.FinesseWeaponsMasteryOther1, 0.05f ), // DaggerMasteryOther1
-                    ( SpellId.MaceMasteryOther1,           0.05f ),
-                    ( SpellId.SpearMasteryOther1,          0.05f ),
-                    ( SpellId.StaffMasteryOther1,          0.05f ),
-                    ( SpellId.HeavyWeaponsMasteryOther1,   0.05f ), // SwordMasteryOther1
-                    ( SpellId.UnarmedCombatMasteryOther1,  0.05f ),
-                    ( SpellId.MissileWeaponsMasteryOther1, 0.05f ), // BowMasteryOther1
-                    ( SpellId.CrossbowMasteryOther1,       0.05f ),
-                    ( SpellId.ThrownWeaponMasteryOther1,   0.05f ),
+                    ( SpellId.LightWeaponsMasteryOther1,   1.0f ), // AxeMasteryOther1
+                    ( SpellId.FinesseWeaponsMasteryOther1, 1.0f ), // DaggerMasteryOther1
+                    //( SpellId.MaceMasteryOther1,           1.0f ),
+                    ( SpellId.SpearMasteryOther1,          1.0f ),
+                    //( SpellId.StaffMasteryOther1,          1.0f ),
+                    ( SpellId.HeavyWeaponsMasteryOther1,   1.0f ), // SwordMasteryOther1
+                    ( SpellId.UnarmedCombatMasteryOther1,  1.0f ),
+                    ( SpellId.MissileWeaponsMasteryOther1, 1.0f ), // BowMasteryOther1
+                    //( SpellId.CrossbowMasteryOther1,       1.0f ),
+                    ( SpellId.ThrownWeaponMasteryOther1,   1.0f ),
                 };
 
                 // caps, qafiyas, turbans, fezs, berets

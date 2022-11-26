@@ -616,6 +616,8 @@ namespace ACE.Server.WorldObjects
 
         public static float MaxCriticalStrikeMod = 0.5f;
 
+        public static float MaxCriticalStrikeModCustomDM = 0.2f;
+
         public static float GetCriticalStrikeMod(CreatureSkill skill, bool isPvP = false)
         {
             var baseMod = 0.0f;
@@ -624,32 +626,66 @@ namespace ACE.Server.WorldObjects
 
             var baseSkill = GetBaseSkillImbued(skill);
 
-            switch (skillType)
+            var defaultCritFrequency = skillType == ImbuedSkillType.Magic ? defaultMagicCritFrequency : defaultPhysicalCritFrequency;
+
+            float criticalStrikeMod;
+
+            if (Common.ConfigManager.Config.Server.WorldRuleset == Common.Ruleset.CustomDM)
             {
-                case ImbuedSkillType.Melee:
+                switch (skillType)
+                {
+                    case ImbuedSkillType.Melee:
 
-                    baseMod = Math.Max(0, baseSkill - 100) / 600.0f;
-                    break;
+                        baseMod = Math.Max(0, baseSkill - 100) / 1500.0f;
+                        break;
 
-                case ImbuedSkillType.Missile:
-                case ImbuedSkillType.Magic:
+                    case ImbuedSkillType.Missile:
 
-                    baseMod = Math.Max(0, baseSkill - 60) / 600.0f;
-                    break;
+                        baseMod = Math.Max(0, baseSkill - 60) / 1500.0f;
+                        break;
 
-                default:
-                    return 0.0f;
+                    case ImbuedSkillType.Magic:
+
+                        baseMod = Math.Max(0, baseSkill - 60) / 2000.0f;
+                        break;
+
+                    default:
+                        return 0.0f;
+                }
+
+                criticalStrikeMod = Math.Clamp(baseMod, defaultCritFrequency, MaxCriticalStrikeModCustomDM);
             }
+            else
+            {
+                switch (skillType)
+                {
+                    case ImbuedSkillType.Melee:
 
-            // http://acpedia.org/wiki/Announcements_-_2004/07_-_Treaties_in_Stone#Letter_to_the_Players
+                        baseMod = Math.Max(0, baseSkill - 100) / 600.0f;
+                        break;
 
-            // For PvE only:
+                    case ImbuedSkillType.Missile:
+                    case ImbuedSkillType.Magic:
 
-            // Critical Strike for War Magic currently scales from 5% critical hit chance to 25% critical hit chance at maximum effectiveness.
-            // In July, the maximum effectiveness will be increased to 50% chance.
+                        baseMod = Math.Max(0, baseSkill - 60) / 600.0f;
+                        break;
 
-            if (skillType == ImbuedSkillType.Magic && isPvP)
-                baseMod *= 0.5f;
+                    default:
+                        return 0.0f;
+                }
+
+                // http://acpedia.org/wiki/Announcements_-_2004/07_-_Treaties_in_Stone#Letter_to_the_Players
+
+                // For PvE only:
+
+                // Critical Strike for War Magic currently scales from 5% critical hit chance to 25% critical hit chance at maximum effectiveness.
+                // In July, the maximum effectiveness will be increased to 50% chance.
+
+                if (skillType == ImbuedSkillType.Magic && isPvP)
+                    baseMod *= 0.5f;
+
+                criticalStrikeMod = Math.Clamp(baseMod, defaultCritFrequency, MaxCriticalStrikeMod);
+            }
 
             // In the original formula for CS Magic pre-July 2004, (BS - 60) / 1200.0f, the minimum 5% crit rate would have been achieved at BS 120,
             // which is exactly equal to the minimum base skill for CS Missile becoming effective.
@@ -670,16 +706,14 @@ namespace ACE.Server.WorldObjects
             if (baseMod >= minEffective)
                 criticalStrikeMod = baseMod;*/
 
-            var defaultCritFrequency = skillType == ImbuedSkillType.Magic ? defaultMagicCritFrequency : defaultPhysicalCritFrequency;
-
-            var criticalStrikeMod = Math.Max(defaultCritFrequency, baseMod);
-
             //Console.WriteLine($"CriticalStrikeMod: {criticalStrikeMod}");
 
             return criticalStrikeMod;
         }
 
         public static float MaxCripplingBlowMod = 6.0f;
+
+        public static float MaxCripplingBlowModCustomDM = 3.0f;
 
         public static float GetCripplingBlowMod(CreatureSkill skill)
         {
@@ -698,20 +732,45 @@ namespace ACE.Server.WorldObjects
 
             var baseMod = 1.0f;
 
-            switch(GetImbuedSkillType(skill))
+            float cripplingBlowMod;
+
+            if (Common.ConfigManager.Config.Server.WorldRuleset == Common.Ruleset.CustomDM)
             {
-                case ImbuedSkillType.Melee:
-                    baseMod = Math.Max(0, baseSkill - 40) / 60.0f;
-                    break;
+                switch (GetImbuedSkillType(skill))
+                {
+                    case ImbuedSkillType.Melee:
+                        baseMod = Math.Max(0, baseSkill - 40) / 120.0f;
+                        break;
 
-                case ImbuedSkillType.Missile:
-                case ImbuedSkillType.Magic:
+                    case ImbuedSkillType.Missile:
+                        baseMod = baseSkill / 120.0f;
+                        break;
 
-                    baseMod = baseSkill / 60.0f;
-                    break;
+                    case ImbuedSkillType.Magic:
+
+                        baseMod = baseSkill / 144.0f;
+                        break;
+                }
+
+                cripplingBlowMod = Math.Clamp(baseMod, 1.0f, MaxCripplingBlowModCustomDM);
             }
+            else
+            {
+                switch (GetImbuedSkillType(skill))
+                {
+                    case ImbuedSkillType.Melee:
+                        baseMod = Math.Max(0, baseSkill - 40) / 60.0f;
+                        break;
 
-            var cripplingBlowMod = Math.Max(1.0f, baseMod);
+                    case ImbuedSkillType.Missile:
+                    case ImbuedSkillType.Magic:
+
+                        baseMod = baseSkill / 60.0f;
+                        break;
+                }
+
+                cripplingBlowMod = Math.Clamp(baseMod, 1.0f, MaxCripplingBlowMod);
+            }
 
             //Console.WriteLine($"CripplingBlowMod: {cripplingBlowMod}");
 
@@ -721,25 +780,47 @@ namespace ACE.Server.WorldObjects
         // elemental rending cap, equivalent to level 6 vuln
         public static float MaxRendingMod = 2.5f;
 
+        // elemental rending cap, equivalent to level 3 vuln
+        public static float MaxRendingModCustomDM = 1.5f;
+
         public static float GetRendingMod(CreatureSkill skill)
         {
             var baseSkill = GetBaseSkillImbued(skill);
 
             var rendingMod = 1.0f;
 
-            switch (GetImbuedSkillType(skill))
+            if (Common.ConfigManager.Config.Server.WorldRuleset == Common.Ruleset.CustomDM)
             {
-                case ImbuedSkillType.Melee:
-                    rendingMod = baseSkill / 160.0f;
-                    break;
+                switch (GetImbuedSkillType(skill))
+                {
+                    case ImbuedSkillType.Melee:
+                        rendingMod = baseSkill / 266.0f;
+                        break;
 
-                case ImbuedSkillType.Missile:
-                case ImbuedSkillType.Magic:
-                    rendingMod = baseSkill / 144.0f;
-                    break;
+                    case ImbuedSkillType.Missile:
+                    case ImbuedSkillType.Magic:
+                        rendingMod = baseSkill / 240.0f;
+                        break;
+                }
+
+                rendingMod = Math.Clamp(rendingMod, 1.0f, MaxRendingModCustomDM);
             }
+            else
+            {
+                switch (GetImbuedSkillType(skill))
+                {
+                    case ImbuedSkillType.Melee:
+                        rendingMod = baseSkill / 160.0f;
+                        break;
 
-            rendingMod = Math.Clamp(rendingMod, 1.0f, MaxRendingMod);
+                    case ImbuedSkillType.Missile:
+                    case ImbuedSkillType.Magic:
+                        rendingMod = baseSkill / 144.0f;
+                        break;
+                }
+
+                rendingMod = Math.Clamp(rendingMod, 1.0f, MaxRendingMod);
+            }
 
             //Console.WriteLine($"RendingMod: {rendingMod}");
 
@@ -748,23 +829,41 @@ namespace ACE.Server.WorldObjects
 
         public static float MaxArmorRendingMod = 0.6f;
 
+        public static float MaxArmorRendingModCustomDM = 0.35f;
+
         public static float GetArmorRendingMod(CreatureSkill skill)
         {
-            // % of armor ignored, min 0%, max 60%
-
             var baseSkill = GetBaseSkillImbued(skill);
 
             var armorRendingMod = 1.0f;
 
-            switch (GetImbuedSkillType(skill))
+            if (Common.ConfigManager.Config.Server.WorldRuleset == Common.Ruleset.CustomDM)
             {
-                case ImbuedSkillType.Melee:
-                    armorRendingMod -= Math.Max(0, baseSkill - 160) / 400.0f;
-                    break;
+                // % of armor ignored, min 0%, max 35%
+                switch (GetImbuedSkillType(skill))
+                {
+                    case ImbuedSkillType.Melee:
+                        armorRendingMod -= Math.Clamp(Math.Max(0, baseSkill - 160) / 685.0f, 0.0f, MaxArmorRendingModCustomDM);
+                        break;
 
-                case ImbuedSkillType.Missile:
-                    armorRendingMod -= Math.Max(0, baseSkill - 144) / 360.0f;
-                    break;
+                    case ImbuedSkillType.Missile:
+                        armorRendingMod -= Math.Clamp(Math.Max(0, baseSkill - 144) / 617.0f, 0.0f, MaxArmorRendingModCustomDM);
+                        break;
+                }
+            }
+            else
+            {
+                // % of armor ignored, min 0%, max 60%
+                switch (GetImbuedSkillType(skill))
+                {
+                    case ImbuedSkillType.Melee:
+                        armorRendingMod -= Math.Clamp(Math.Max(0, baseSkill - 160) / 400.0f, 0.0f, MaxArmorRendingMod);
+                        break;
+
+                    case ImbuedSkillType.Missile:
+                        armorRendingMod -= Math.Clamp(Math.Max(0, baseSkill - 144) / 360.0f, 0.0f, MaxArmorRendingMod);
+                        break;
+                }
             }
 
             //Console.WriteLine($"ArmorRendingMod: {armorRendingMod}");
@@ -795,11 +894,16 @@ namespace ACE.Server.WorldObjects
             if (IgnoreArmor == null)
                 return 1.0f;
 
-            // FIXME: data
-            var maxSpellLevel = GetMaxSpellLevel();
+            if (Common.ConfigManager.Config.Server.WorldRuleset == Common.Ruleset.CustomDM)
+                return (float)IgnoreArmor;
+            else
+            {
+                // FIXME: data
+                var maxSpellLevel = GetMaxSpellLevel();
 
-            // thanks to moro for this formula
-            return 1.0f - (0.1f + maxSpellLevel * 0.05f);
+                // thanks to moro for this formula
+                return 1.0f - (0.1f + maxSpellLevel * 0.05f);
+            }
         }
 
         public double? IgnoreShield

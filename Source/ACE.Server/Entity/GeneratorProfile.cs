@@ -108,7 +108,7 @@ namespace ACE.Server.Entity
         {
             get
             {
-                if (Generator is Chest)
+                if (Generator is Chest && (Generator.ActivationResponse == ActivationResponse.Use || FirstSpawn))
                     return 0;
 
                 return Biota.Delay ?? Generator.GeneratorProfiles[0].Biota.Delay ?? 0.0f;

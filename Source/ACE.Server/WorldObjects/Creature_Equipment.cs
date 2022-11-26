@@ -825,5 +825,22 @@ namespace ACE.Server.WorldObjects
                     item.Destroy();
             }
         }
+
+        public double CachedMeleeDefenseCapBonus = 0.0f;
+        public double CachedMissileDefenseCapBonus = 0.0f;
+        public double CachedMagicDefenseCapBonus = 0.0f;
+        public void UpdateDefenseCapBonus()
+        {
+            CachedMeleeDefenseCapBonus = 0;
+            CachedMissileDefenseCapBonus = 0;
+            CachedMagicDefenseCapBonus = 0;
+
+            foreach (var entry in EquippedObjects)
+            {
+                CachedMeleeDefenseCapBonus += entry.Value.MeleeDefenseCap ?? 0;
+                CachedMissileDefenseCapBonus += entry.Value.MissileDefenseCap ?? 0;
+                CachedMagicDefenseCapBonus += entry.Value.MagicDefenseCap ?? 0;
+            }
+        }
     }
 }

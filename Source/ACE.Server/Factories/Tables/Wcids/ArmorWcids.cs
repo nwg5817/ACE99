@@ -696,7 +696,6 @@ namespace ACE.Server.Factories.Tables.Wcids
 
                     ( WeenieClassName.capmetal,             1.0f ),
                     ( WeenieClassName.mailcoif,             1.0f ),
-                    ( WeenieClassName.coifscale,            1.0f ),
                     ( WeenieClassName.basinetchainmail,     1.0f ),
 
                     ( WeenieClassName.gauntletschainmail,   2.0f ),
@@ -755,6 +754,7 @@ namespace ACE.Server.Factories.Tables.Wcids
                     ( WeenieClassName.armet,                1.0f ),
                     ( WeenieClassName.heaumenew,            1.0f ),
                     ( WeenieClassName.basinetscalemail,     1.0f ),
+                    ( WeenieClassName.coifscale,            1.0f ),
 
                     ( WeenieClassName.gauntletsscalemail,   2.0f ),
                     ( WeenieClassName.sollerets,            2.0f ),
@@ -1154,7 +1154,7 @@ namespace ACE.Server.Factories.Tables.Wcids
             {
                 LeatherWcids = new ChanceTable<WeenieClassName>(ChanceTableType.Weight)
                 {
-                    ( WeenieClassName.buckler,                 1.0f ),
+                    ( WeenieClassName.buckler,                 2.0f ),
 
                     ( WeenieClassName.capleather,              1.0f ),
 
@@ -1238,7 +1238,6 @@ namespace ACE.Server.Factories.Tables.Wcids
 
                     ( WeenieClassName.capmetal,             1.0f ),
                     ( WeenieClassName.mailcoif,             1.0f ),
-                    ( WeenieClassName.coifscale,            1.0f ),
                     ( WeenieClassName.basinetchainmail,     1.0f ),
 
                     ( WeenieClassName.gauntletschainmail,   2.0f ),
@@ -1262,10 +1261,16 @@ namespace ACE.Server.Factories.Tables.Wcids
                 // platemail - aluvian
                 PlatemailWcids = new ChanceTable<WeenieClassName>(ChanceTableType.Weight)
                 {
-                    ( WeenieClassName.shieldtower,          1.0f ),
+                    ( WeenieClassName.buckler,              0.2f ),
+                    ( WeenieClassName.shieldkite,           0.2f ),
+                    ( WeenieClassName.shieldround,          0.2f ),
+                    ( WeenieClassName.shieldkitelarge,      0.2f ),
+                    ( WeenieClassName.shieldroundlarge,     0.2f ),
+                    ( WeenieClassName.shieldtower,          0.2f ),
 
-                    ( WeenieClassName.helmhorned,           1.0f ),
                     ( WeenieClassName.helmet,               1.0f ),
+                    ( WeenieClassName.helmhorned,           1.0f ),
+
                     ( WeenieClassName.armet,                1.0f ),
                     ( WeenieClassName.heaume,               1.0f ),
                     ( WeenieClassName.heaumenew,            1.0f ),
@@ -1291,14 +1296,16 @@ namespace ACE.Server.Factories.Tables.Wcids
                 // platemail - gharu'ndim
                 ScalemailWcids = new ChanceTable<WeenieClassName>(ChanceTableType.Weight)
                 {
-                    ( WeenieClassName.shieldtower,          1.0f ),
+                    ( WeenieClassName.buckler,              0.2f ),
+                    ( WeenieClassName.shieldkite,           0.2f ),
+                    ( WeenieClassName.shieldround,          0.2f ),
+                    ( WeenieClassName.shieldkitelarge,      0.2f ),
+                    ( WeenieClassName.shieldroundlarge,     0.2f ),
+                    ( WeenieClassName.shieldtower,          0.2f ),
 
                     ( WeenieClassName.baigha,               1.0f ),
-                    ( WeenieClassName.helmet,               1.0f ),
-                    ( WeenieClassName.armet,                1.0f ),
-                    ( WeenieClassName.heaume,               1.0f ),
-                    ( WeenieClassName.heaumenew,            1.0f ),
                     ( WeenieClassName.basinetscalemail,     1.0f ),
+                    ( WeenieClassName.coifscale,            1.0f ),
 
                     ( WeenieClassName.gauntletsscalemail,   2.0f ),
                     ( WeenieClassName.sollerets,            2.0f ),
@@ -1322,28 +1329,30 @@ namespace ACE.Server.Factories.Tables.Wcids
                 // platemail - sho
                 YoroiWcids = new ChanceTable<WeenieClassName>(ChanceTableType.Weight)
                 {
-                    ( WeenieClassName.shieldtower,        1.0f ),
+                    ( WeenieClassName.buckler,              0.2f ),
+                    ( WeenieClassName.shieldkite,           0.2f ),
+                    ( WeenieClassName.shieldround,          0.2f ),
+                    ( WeenieClassName.shieldkitelarge,      0.2f ),
+                    ( WeenieClassName.shieldroundlarge,     0.2f ),
+                    ( WeenieClassName.shieldtower,          0.2f ),
 
-                    ( WeenieClassName.kabuton,            1.0f ),
-                    ( WeenieClassName.helmet,             1.0f ),
-                    ( WeenieClassName.armet,              1.0f ),
-                    ( WeenieClassName.heaume,             1.0f ),
-                    ( WeenieClassName.heaumenew,          1.0f ),
+                    ( WeenieClassName.kabuton,              1.0f ),
+                    ( WeenieClassName.helmet,               1.0f ),
 
-                    ( WeenieClassName.gauntletsplatemail, 2.0f ),
-                    ( WeenieClassName.sollerets,          2.0f ),
+                    ( WeenieClassName.gauntletsplatemail,   2.0f ),
+                    ( WeenieClassName.sollerets,            2.0f ),
 
-                    ( WeenieClassName.breastplateyoroi,   1.0f ),
-                    ( WeenieClassName.cuirassyoroi,       1.0f ),
-                    ( WeenieClassName.girthyoroi,         1.0f ),
+                    ( WeenieClassName.breastplateyoroi,     1.0f ),
+                    ( WeenieClassName.cuirassyoroi,         1.0f ),
+                    ( WeenieClassName.girthyoroi,           1.0f ),
 
-                    ( WeenieClassName.leggingsyoroi,      1.0f ),
-                    ( WeenieClassName.tassetsyoroi,       1.0f ),
-                    ( WeenieClassName.greavesyoroi,       1.0f ),
+                    ( WeenieClassName.leggingsyoroi,        1.0f ),
+                    ( WeenieClassName.tassetsyoroi,         1.0f ),
+                    ( WeenieClassName.greavesyoroi,         1.0f ),
 
-                    ( WeenieClassName.sleevesyoroi,       1.0f ),
-                    ( WeenieClassName.pauldronsyoroi,     1.0f ),
-                    ( WeenieClassName.kote,               1.0f ),
+                    ( WeenieClassName.sleevesyoroi,         1.0f ),
+                    ( WeenieClassName.pauldronsyoroi,       1.0f ),
+                    ( WeenieClassName.kote,                 1.0f ),
                 };
 
                 // heritage low - aluvian

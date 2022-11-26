@@ -47,12 +47,14 @@ namespace ACE.Server.WorldObjects
         {
             get
             {
-                var chestResetInterval = RegenerationInterval;
+                var chestResetInterval = GetProperty(PropertyFloat.ResetInterval);
+                if (chestResetInterval == null)
+                    chestResetInterval = GetProperty(PropertyFloat.RegenerationInterval);
 
-                if (chestResetInterval < 15)
+                if (chestResetInterval == null || chestResetInterval < 15)
                     chestResetInterval = Default_ChestResetInterval;
 
-                return chestResetInterval;
+                return chestResetInterval.Value;
             }
         }
 
@@ -230,7 +232,7 @@ namespace ACE.Server.WorldObjects
                     var actionChain = new ActionChain();
                     actionChain.AddDelaySeconds(1.0f);
                     actionChain.AddAction(this, () => Generator.ResetGenerator());
-                    actionChain.EnqueueChain();                    
+                    actionChain.EnqueueChain();
                 }
                 else if (CurrentCreate == 0)
                     FadeOutAndDestroy(); // Chest's complete generated inventory count has been wiped out

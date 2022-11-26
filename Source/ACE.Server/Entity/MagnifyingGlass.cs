@@ -125,7 +125,7 @@ namespace ACE.Server.Entity
                     return;
                 }
 
-                var itemsNeedingAppraisal = container.Inventory.Values.Where(k => k.OriginalValue.HasValue && k.OriginalValue != k.Value).ToList();
+                var itemsNeedingAppraisal = container.Inventory.Values.Where(k => k.OriginalValue.HasValue && k.OriginalValue != k.Value && !k.Retained).ToList();
                 if(itemsNeedingAppraisal.Count == 0)
                 {
                     player.Session.Network.EnqueueSend(new GameMessageSystemChat("There's nothing needing appraisal in this container.", ChatMessageType.Broadcast));
@@ -166,6 +166,13 @@ namespace ACE.Server.Entity
             }
             else
             {
+                if (target.Retained)
+                {
+                    player.Session.Network.EnqueueSend(new GameMessageSystemChat("Retained items cannot be appraised.", ChatMessageType.Broadcast));
+                    player.SendUseDoneEvent();
+                    return;
+                }
+
                 if (!target.OriginalValue.HasValue)
                 {
                     player.Session.Network.EnqueueSend(new GameMessageSystemChat("You can't appraise that.", ChatMessageType.Broadcast));

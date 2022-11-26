@@ -223,6 +223,9 @@ namespace ACE.Entity.Enum.Properties
         LeyLineTriggerChance           = 10001,
         [ServerOnly]
         HotspotImmunityTimestamp       = 10002,
+        MeleeDefenseCap                = 10003,
+        MissileDefenseCap              = 10004,
+        MagicDefenseCap                = 10005,
     }
 
     public static class PropertyFloatExtensions

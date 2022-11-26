@@ -502,6 +502,53 @@ namespace ACE.Server.Network.Structure
                 PropertiesInt[PropertyInt.AppraisalLongDescDecoration] = (int)appraisalLongDescDecoration;
             else
                 PropertiesInt.Remove(PropertyInt.AppraisalLongDescDecoration);
+
+            if (Common.ConfigManager.Config.Server.WorldRuleset == Common.Ruleset.CustomDM)
+            {
+                string extraPropertiesText;
+                if (PropertiesString.TryGetValue(PropertyString.Use, out var useText) && useText.Length > 0)
+                    extraPropertiesText = $"{useText}\n\n";
+                else
+                    extraPropertiesText = "";
+
+                bool hasExtraPropertiesText = false;
+                if (PropertiesFloat.TryGetValue(PropertyFloat.MeleeDefenseCap, out var meleeDefenseCap) && meleeDefenseCap != 0)
+                {
+                    if (PropertiesFloat.TryGetValue(PropertyFloat.MissileDefenseCap, out var missileDefenseCap) && missileDefenseCap == meleeDefenseCap)
+                    {
+                        // We have both melee and missile entries and they are the same value, group them up into "Evasion"
+                        if (hasExtraPropertiesText)
+                            extraPropertiesText += "\n";
+                        extraPropertiesText += $"Max Evasion Chance: {(meleeDefenseCap > 0 ? "+" : "")}{meleeDefenseCap.ToString("0.0")}%.";
+                        hasExtraPropertiesText = true;
+                    }
+                    else
+                    {
+                        if (hasExtraPropertiesText)
+                            extraPropertiesText += "\n";
+                        extraPropertiesText += $"Max Melee Evasion Chance: {(meleeDefenseCap > 0 ? "+" : "")}{meleeDefenseCap.ToString("0.0")}%.";
+                        hasExtraPropertiesText = true;
+                    }
+                }
+                else if (PropertiesFloat.TryGetValue(PropertyFloat.MissileDefenseCap, out var missileDefenseCap) && missileDefenseCap != 0)
+                {
+                    if (hasExtraPropertiesText)
+                        extraPropertiesText += "\n";
+                    extraPropertiesText += $"Max Missile Evasion Chance: {(missileDefenseCap > 0 ? "+" : "")}{missileDefenseCap.ToString("0.0")}%.";
+                    hasExtraPropertiesText = true;
+                }
+
+                if (PropertiesFloat.TryGetValue(PropertyFloat.MagicDefenseCap, out var magicDefenseCap) && magicDefenseCap != 0)
+                {
+                    if (hasExtraPropertiesText)
+                        extraPropertiesText += "\n";
+                    extraPropertiesText += $"Max Magic Resistance Chance: {(magicDefenseCap > 0 ? "+" : "")}{magicDefenseCap.ToString("0.0")}%.";
+                    hasExtraPropertiesText = true;
+                }
+
+                if (hasExtraPropertiesText)
+                    PropertiesString[PropertyString.Use] = extraPropertiesText;
+            }
         }
 
         private void BuildSpells(WorldObject wo)

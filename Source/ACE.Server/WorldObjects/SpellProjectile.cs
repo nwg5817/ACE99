@@ -453,29 +453,48 @@ namespace ACE.Server.WorldObjects
             if (sourceCreature != null)
                 attackSkill = sourceCreature.GetCreatureSkill(Spell.School);
 
-            // critical hit
-            var criticalChance = GetWeaponMagicCritFrequency(weapon, sourceCreature, attackSkill, target);
+            TacticAndTechniqueType techniqueId = TacticAndTechniqueType.None;
+            WorldObject techniqueTrinket = null;
 
-            if (sourcePlayer != null && source != target)
+            if (sourcePlayer != null && Common.ConfigManager.Config.Server.WorldRuleset == Common.Ruleset.CustomDM)
             {
-                var techniqueTrinket = sourcePlayer.GetEquippedTrinket();
-                if (techniqueTrinket != null && techniqueTrinket.TacticAndTechniqueId == (int)TacticAndTechniqueType.Opportunist)
-                    criticalChance += 0.10f;
+                techniqueTrinket = sourcePlayer.GetEquippedTrinket();
+                if (techniqueTrinket != null)
+                    techniqueId = (TacticAndTechniqueType)techniqueTrinket.TacticAndTechniqueId;
             }
 
-            if (ThreadSafeRandom.Next(0.0f, 1.0f) < criticalChance)
+            // critical hit
+            float criticalChance;
+            if (techniqueId != TacticAndTechniqueType.Defensive)
             {
-                if (targetPlayer != null && targetPlayer.AugmentationCriticalDefense > 0)
-                {
-                    var criticalDefenseMod = sourcePlayer != null ? 0.05f : 0.25f;
-                    var criticalDefenseChance = targetPlayer.AugmentationCriticalDefense * criticalDefenseMod;
+                criticalChance = GetWeaponMagicCritFrequency(weapon, sourceCreature, attackSkill, target);
 
-                    if (criticalDefenseChance > ThreadSafeRandom.Next(0.0f, 1.0f))
-                        critDefended = true;
+                if (sourcePlayer != null && source != target)
+                {
+                    if (techniqueId == TacticAndTechniqueType.Opportunist)
+                        criticalChance += 0.10f;
                 }
 
-                if (!critDefended)
-                    criticalHit = true;
+                if (ThreadSafeRandom.Next(0.0f, 1.0f) < criticalChance)
+                {
+                    if (targetPlayer != null && targetPlayer.AugmentationCriticalDefense > 0)
+                    {
+                        var criticalDefenseMod = sourcePlayer != null ? 0.05f : 0.25f;
+                        var criticalDefenseChance = targetPlayer.AugmentationCriticalDefense * criticalDefenseMod;
+
+                        if (criticalDefenseChance > ThreadSafeRandom.Next(0.0f, 1.0f))
+                            critDefended = true;
+                    }
+
+                    if (!critDefended)
+                        criticalHit = true;
+                }
+            }
+            else
+            {
+                // Defensive technique never crits.
+                criticalChance = 0.0f;
+                criticalHit = false;
             }
 
             var absorbMod = GetAbsorbMod(target);

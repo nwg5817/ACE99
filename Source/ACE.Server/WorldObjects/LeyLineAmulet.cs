@@ -231,6 +231,8 @@ namespace ACE.Server.WorldObjects
             SpellId.CANTRIPFLAMEWARD1,
             SpellId.CANTRIPSLASHINGWARD1,
             SpellId.CANTRIPPIERCINGWARD1,
+
+            SpellId.CantripArmorAptitude1,
         };
 
         public static readonly List<SpellId> PossibleAcquireSpells = new List<SpellId>()
@@ -360,6 +362,10 @@ namespace ACE.Server.WorldObjects
             SpellId.ShieldMasterySelf1,
             SpellId.ShieldMasteryOther1,
             SpellId.ShieldIneptitudeOther1,
+
+            SpellId.ArmorMasterySelf1,
+            SpellId.ArmorMasteryOther1,
+            SpellId.ArmorIneptitudeOther1,
 
             SpellId.LeadershipMasterySelf1,
             SpellId.LeadershipMasteryOther1,

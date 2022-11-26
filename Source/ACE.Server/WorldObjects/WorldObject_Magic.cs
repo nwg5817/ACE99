@@ -101,13 +101,16 @@ namespace ACE.Server.WorldObjects
         /// based upon the caster's magic skill vs target's magic defense skill
         /// </summary>
         /// <returns>TRUE if spell is resisted</returns>
-        public static bool MagicDefenseCheck(uint casterMagicSkill, uint targetMagicDefenseSkill, out float resistChance, float chanceMod = 1.0f)
+        public static bool MagicDefenseCheck(uint casterMagicSkill, uint targetMagicDefenseSkill, out float resistChance, float chanceMod = 1.0f, float magicDefenseCapBonus = 0.0f)
         {
             // uses regular 0.03 factor, and not magic casting 0.07 factor
             var chance = SkillCheck.GetSkillChance((int)casterMagicSkill, (int)targetMagicDefenseSkill);
             var rng = ThreadSafeRandom.Next(0.0f, 1.0f);
 
             resistChance = (float)(1.0f - (chance * chanceMod));
+
+            if (Common.ConfigManager.Config.Server.WorldRuleset == Common.Ruleset.CustomDM)
+                resistChance = Math.Min(resistChance, 0.95f + (magicDefenseCapBonus * 0.01f));
 
             return chance <= rng;
         }
@@ -189,11 +192,11 @@ namespace ACE.Server.WorldObjects
                 }
             }
 
-            //Console.WriteLine($"{target.Name}.ResistSpell({Name}, {spell.Name}): magicSkill: {magicSkill}, difficulty: {difficulty}");
-            bool resisted = MagicDefenseCheck(magicSkill, difficulty, out float resistChance, resistChanceMod);
-
             var player = this as Player;
             var targetPlayer = target as Player;
+
+            //Console.WriteLine($"{target.Name}.ResistSpell({Name}, {spell.Name}): magicSkill: {magicSkill}, difficulty: {difficulty}");
+            bool resisted = MagicDefenseCheck(magicSkill, difficulty, out float resistChance, resistChanceMod, targetPlayer != null ? (float)targetPlayer.CachedMagicDefenseCapBonus : 5.0f);
 
             if (targetPlayer != null)
             {

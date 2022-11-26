@@ -105,6 +105,10 @@ namespace ACE.Server.Factories
 
             RollHollow(profile, wo);
 
+            RollArmorCleaving(profile, wo);
+
+            RollShieldCleaving(profile, wo);
+
             RollSlayer(profile, wo);
 
             // material type
